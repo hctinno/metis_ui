@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metis 컴포넌트 견본</title>
+<link rel="stylesheet" href="metis-tokens.css">
+<link rel="stylesheet" href="metis-components.css">
+<style>
+/* 이 아래는 견본 페이지의 배치용이다. 앱에 옮기지 않는다. */
+html, body { margin: 0; }
+.g-page { min-height: 100vh; padding: 28px 16px 48px; }
+.g-wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+.g-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.g-sec { display: flex; flex-direction: column; gap: 8px; }
+.g-box { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 16px; }
+.g-col { display: flex; flex-direction: column; gap: 12px; padding: 16px; }
+.g-note { max-width: 68ch; }
+.g-side { width: 264px; padding: 8px; background: var(--side); border-radius: var(--r-md); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 2px; }
+.g-stage { position: relative; display: flex; justify-content: center; padding: 20px; border-radius: var(--r-md); background: var(--bg); border: 1px solid var(--line); }
+.g-stage .mt-scrim, .g-stage .mt-toast { position: static; translate: none; }
+.g-chat { display: flex; flex-direction: column; gap: 14px; padding: 16px; }
+</style>
+</head>
+<body>
+<div class="mt-root g-page" id="root" data-theme="light">
+<div class="g-wrap">
+
+<header class="g-top">
+  <div>
+    <h1 class="mt-display">Metis 컴포넌트 견본</h1>
+    <p class="mt-caption g-note">DESIGN.md 4~5장의 컴포넌트를 <code class="mt-mono">metis-components.css</code>로 그린 것입니다. 마우스를 올리고, 누르고, Tab으로 옮겨 보세요. 마크업을 그대로 복사해 쓸 수 있습니다.</p>
+  </div>
+  <div class="mt-seg" role="radiogroup" aria-label="테마" id="theme">
+    <button class="mt-seg-item" role="radio" aria-checked="true" data-theme-value="light">라이트</button>
+    <button class="mt-seg-item" role="radio" aria-checked="false" data-theme-value="dark">다크</button>
+  </div>
+</header>
+
+<section class="g-sec" aria-labelledby="s-btn">
+  <h2 class="mt-group-title" id="s-btn">버튼 (5.1)</h2>
+  <div class="mt-card g-box">
+    <button class="mt-btn mt-btn--primary">저장</button>
+    <button class="mt-btn">취소</button>
+    <button class="mt-btn mt-btn--danger">삭제</button>
+    <button class="mt-btn mt-btn--ghost">거부</button>
+    <button class="mt-btn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>가져오기…</button>
+    <button class="mt-btn mt-btn--sm">실행</button>
+    <button class="mt-btn" aria-disabled="true">쓸 수 없음</button>
+    <button class="mt-btn mt-btn--primary" data-loading aria-busy="true">저장 중</button>
+  </div>
+  <div class="mt-card g-box">
+    <button class="mt-icon-btn" aria-label="더 보기"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8h.01M8 8h.01M12.5 8h.01" stroke-width="2.4"/></svg></button>
+    <button class="mt-icon-btn mt-icon-btn--quiet" aria-label="복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="2"/><path d="M10.5 5.5v-1a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1"/></svg></button>
+    <button class="mt-icon-btn mt-icon-btn--sm" aria-label="터미널 패널" aria-pressed="true" data-toggle="pressed"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M5 7l2 1.5L5 10M9 10h2"/></svg></button>
+    <button class="mt-icon-btn mt-icon-btn--sm" aria-label="파일 패널" aria-pressed="false" data-toggle="pressed"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 5a2 2 0 0 1 2-2h2.5l1.5 2H12a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/></svg></button>
+    <span class="mt-tooltip" role="tooltip">새 채팅 <span>Ctrl+T</span></span>
+    <span class="mt-kbd">Ctrl+Shift+N</span>
+  </div>
+</section>
+
+<section class="g-sec" aria-labelledby="s-inp">
+  <h2 class="mt-group-title" id="s-inp">입력 (5.2, 7.4)</h2>
+  <div class="mt-card g-col">
+    <div class="mt-field">
+      <label class="mt-label" for="g-name">프로젝트 이름</label>
+      <input class="mt-input" id="g-name" placeholder="예: web-app" aria-describedby="g-name-help">
+      <span class="mt-help" id="g-name-help">폴더 이름으로도 쓰입니다.</span>
+    </div>
+    <div class="mt-field">
+      <label class="mt-label" for="g-bad">일정 이름</label>
+      <input class="mt-input" id="g-bad" aria-invalid="true" aria-describedby="g-bad-err">
+      <span class="mt-error" id="g-bad-err" role="alert">일정 이름을 입력하세요.</span>
+    </div>
+    <div class="mt-field">
+      <label class="mt-label" for="g-loc">폴더 위치</label>
+      <div class="mt-input-row"><input class="mt-input" id="g-loc" value="C:\work"><button class="mt-btn">찾아보기…</button></div>
+    </div>
+    <div class="mt-field">
+      <label class="mt-label" for="g-key">API 키</label>
+      <div class="mt-input-row"><input class="mt-input" id="g-key" type="password" autocomplete="off" value="example"><button class="mt-btn" aria-pressed="false">보기</button></div>
+    </div>
+    <div class="mt-field">
+      <label class="mt-label" for="g-area">지시</label>
+      <textarea class="mt-input" id="g-area" placeholder="무엇을 할지 적습니다"></textarea>
+    </div>
+    <div class="mt-input-row">
+      <input class="mt-input mt-input--search" aria-label="채팅 검색" placeholder="채팅 검색">
+      <input class="mt-input mt-input--num" aria-label="최대 턴 수" value="1000" inputmode="numeric"><span class="mt-caption">턴</span>
+    </div>
+  </div>
+</section>
+
+<section class="g-sec" aria-labelledby="s-sel">
+  <h2 class="mt-group-title" id="s-sel">선택 컨트롤 (5.3)</h2>
+  <div class="mt-card">
+    <div class="mt-row">
+      <div class="mt-row-main"><span class="mt-row-title">작업 완료 알림</span><span class="mt-row-desc" id="g-d1">창이 뒤에 있을 때 작업이 끝나면 알립니다.</span></div>
+      <button class="mt-switch" role="switch" aria-checked="true" aria-label="작업 완료 알림" aria-describedby="g-d1" data-toggle="checked"><span class="mt-switch-thumb"></span></button>
+    </div>
+    <div class="mt-row">
+      <div class="mt-row-main"><span class="mt-row-title">잠자기 방지</span><span class="mt-row-desc" id="g-d2">작업하는 동안 컴퓨터가 잠들지 않게 합니다.</span></div>
+      <button class="mt-switch" role="switch" aria-checked="false" aria-label="잠자기 방지" aria-describedby="g-d2" data-toggle="checked"><span class="mt-switch-thumb"></span></button>
+    </div>
+    <div class="mt-row">
+      <div class="mt-row-main"><span class="mt-row-title">테마</span></div>
+      <div class="mt-seg" role="radiogroup" aria-label="테마 예시" data-group>
+        <button class="mt-seg-item" role="radio" aria-checked="false">라이트</button>
+        <button class="mt-seg-item" role="radio" aria-checked="true">다크</button>
+        <button class="mt-seg-item" role="radio" aria-checked="false">Aura</button>
+        <button class="mt-seg-item" role="radio" aria-checked="false">시스템</button>
+      </div>
+    </div>
+    <div class="mt-row">
+      <div class="mt-row-main"><span class="mt-row-title">추론 강도</span><span class="mt-row-desc">새 채팅에 적용할 기본값입니다.</span></div>
+      <button class="mt-select" aria-haspopup="listbox" aria-expanded="false" aria-label="추론 강도">높음<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button>
+    </div>
+    <div class="mt-row">
+      <div class="mt-row-main"><span class="mt-row-title">새 채팅</span><span class="mt-row-desc">현재 창에서 새 채팅을 만듭니다.</span></div>
+      <div class="mt-row-actions"><span class="mt-kbd">Ctrl+T</span><button class="mt-btn mt-btn--sm">변경…</button><button class="mt-switch" role="switch" aria-checked="true" aria-label="새 채팅 단축키 사용" data-toggle="checked"><span class="mt-switch-thumb"></span></button></div>
+    </div>
+  </div>
+  <div class="mt-card g-col" role="radiogroup" aria-label="기본 모드" data-group>
+    <button class="mt-option" role="radio" aria-checked="false"><span class="mt-radio"></span><span class="mt-row-main"><span class="mt-row-title">자율</span><span class="mt-row-desc">파일을 자유롭게 편집, 생성, 삭제할 수 있습니다.</span></span></button>
+    <button class="mt-option" role="radio" aria-checked="true"><span class="mt-radio"></span><span class="mt-row-main"><span class="mt-row-title">수동</span><span class="mt-row-desc">도구를 쓰기 전에 승인을 받습니다.</span></span></button>
+  </div>
+  <div class="mt-card g-box">
+    <button class="mt-checkbox" role="checkbox" aria-checked="true" aria-label="선택 예시 1" data-toggle="checked"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></button>
+    <button class="mt-checkbox" role="checkbox" aria-checked="false" aria-label="선택 예시 2" data-toggle="checked"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></button>
+    <span class="mt-tag">자율</span>
+    <button class="mt-tag mt-tag--lg" aria-haspopup="dialog" aria-expanded="false"><span class="mt-mono">example/model-pro</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button>
+    <span class="mt-chip">report.pdf <span class="mt-caption">240KB</span><button class="mt-icon-btn mt-icon-btn--sm" aria-label="report.pdf 첨부 지우기"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></span>
+  </div>
+</section>
+
+<section class="g-sec" aria-labelledby="s-menu">
+  <h2 class="mt-group-title" id="s-menu">메뉴, 탭, 사이드바 (5.4, 5.6, 5.8)</h2>
+  <div class="mt-card g-box" style="align-items: flex-start">
+    <div class="mt-menu" role="menu" aria-label="채팅 메뉴" style="position: static">
+      <button class="mt-menu-item" role="menuitem">이름 바꾸기…</button>
+      <button class="mt-menu-item" role="menuitem">복제</button>
+      <button class="mt-menu-item" role="menuitem">내보내기</button>
+      <div class="mt-menu-sep" role="separator"></div>
+      <button class="mt-menu-item mt-menu-item--danger" role="menuitem">삭제</button>
+    </div>
+    <div class="mt-menu" role="listbox" aria-label="추론 강도" style="position: static" data-group>
+      <div class="mt-menu-label">추론 강도</div>
+      <button class="mt-menu-item" role="option" aria-checked="false"><svg class="mt-menu-check" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>낮음</button>
+      <button class="mt-menu-item" role="option" aria-checked="true"><svg class="mt-menu-check" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>높음</button>
+      <button class="mt-menu-item" role="option" aria-checked="false"><svg class="mt-menu-check" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>최대</button>
+    </div>
+    <nav class="g-side" aria-label="사이드바 예시">
+      <button class="mt-btn mt-btn--primary" style="height: var(--h-primary-nav); width: 100%"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>새 채팅</button>
+      <button class="mt-nav-item" aria-current="page"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="10" height="12" rx="2"/><path d="M6 6h4M6 9h4"/></svg>레시피</button>
+      <button class="mt-nav-item"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 1.5"/></svg>스케줄러</button>
+      <div class="mt-section-title"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>채팅</div>
+      <button class="mt-nav-item"><span class="mt-status" data-status="run" role="img" aria-label="실행 중"></span>로그인 오류 수정</button>
+      <button class="mt-nav-item"><span class="mt-status" data-status="wait" role="img" aria-label="승인 대기"></span>고객 필터 추가</button>
+      <button class="mt-nav-item">배포 스크립트 정리</button>
+    </nav>
+  </div>
+  <div class="mt-card">
+    <div class="mt-tabs" role="tablist" aria-label="패널 탭" data-group="selected" style="padding: 0 8px">
+      <button class="mt-tab" role="tab" aria-selected="true">브라우저</button>
+      <button class="mt-tab" role="tab" aria-selected="false">파일</button>
+      <button class="mt-tab" role="tab" aria-selected="false">터미널</button>
+    </div>
+    <div role="tree" aria-label="파일" style="padding: 8px">
+      <button class="mt-tree-item" role="treeitem" aria-expanded="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4"/></svg>src</button>
+      <button class="mt-tree-item" role="treeitem" aria-selected="true" style="--depth: 1">feature.py</button>
+      <button class="mt-tree-item" role="treeitem" style="--depth: 1">app.py</button>
+    </div>
+  </div>
+</section>
+
+<section class="g-sec" aria-labelledby="s-st">
+  <h2 class="mt-group-title" id="s-st">상태 표시와 진행 (5.11, 3.8)</h2>
+  <div class="mt-card g-box">
+    <span class="mt-tag"><span class="mt-status" data-status="run" aria-hidden="true"></span>실행 중</span>
+    <span class="mt-tag"><span class="mt-status" data-status="wait" aria-hidden="true"></span>승인 대기</span>
+    <span class="mt-tag"><span class="mt-status" data-status="done" aria-hidden="true"></span>완료</span>
+    <span class="mt-tag"><span class="mt-status" data-status="off" aria-hidden="true"></span>꺼짐</span>
+    <span class="mt-tag"><span class="mt-status" data-status="error" aria-hidden="true"></span>오류</span>
+    <span class="mt-typing" role="status" aria-label="응답 작성 중"><i></i><i></i><i></i></span>
+    <div style="flex: 1; min-width: 160px; display: flex; align-items: center; gap: 8px"><div class="mt-progress" role="progressbar" aria-label="파일 처리" aria-valuenow="3" aria-valuemax="10" style="flex: 1"><i style="width: 30%"></i></div><span class="mt-caption mt-num">3/10</span></div>
+  </div>
+  <div class="mt-card" style="overflow: hidden"><div class="mt-runbar" role="progressbar" aria-label="실행 중"><i></i></div><div class="g-box"><span class="mt-caption">채팅 헤더 아래의 진행 막대입니다. 승인을 기다리는 동안에는 숨깁니다.</span></div></div>
+</section>
+
+<section class="g-sec" aria-labelledby="s-chat">
+  <h2 class="mt-group-title" id="s-chat">대화 요소 (5.13)</h2>
+  <div class="mt-card g-chat" role="log" aria-label="대화 예시">
+    <div class="mt-bubble">로그인 오류를 고쳐줘</div>
+    <details class="mt-thinking"><summary><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4"/></svg>생각 과정 · 4초</summary><div>세션 만료 처리에서 오류가 나는지 먼저 확인한다.</div></details>
+    <div class="mt-prose">
+      <p>원인은 <code>current_user</code>가 <strong>만료된 세션</strong>에서 빈 값을 돌려주는 것이었습니다. <a href="#s-chat">관련 문서</a>도 함께 고쳤습니다.</p>
+      <h3>바꾼 것</h3>
+      <ul><li>세션이 만료되면 로그인 화면으로 보냅니다.</li><li>테스트 2건을 추가했습니다.</li></ul>
+      <table><thead><tr><th>파일</th><th>변경</th></tr></thead><tbody><tr><td>src/feature.py</td><td>+2 −1</td></tr></tbody></table>
+    </div>
+    <div class="mt-card">
+      <div class="mt-row" style="min-height: 0"><span class="mt-row-title" style="flex: 1">할 일</span><span class="mt-caption mt-num">1/3</span></div>
+      <div style="padding: 4px 14px 10px">
+        <div class="mt-step" data-status="done"><span class="mt-step-mark"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span>관련 파일 파악</div>
+        <div class="mt-step" data-status="now"><span class="mt-step-mark"></span>변경 적용</div>
+        <div class="mt-step" data-status="todo"><span class="mt-step-mark"></span>검증 실행</div>
+      </div>
+    </div>
+    <div class="mt-card" style="overflow: hidden">
+      <button class="mt-tool" aria-expanded="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4"/></svg><span class="mt-tool-kind">Developer</span><span class="mt-tool-target">텍스트 편집기 · 쓰기 src/feature.py</span><span class="mt-tool-result">+2 −1</span></button>
+      <div class="mt-diff" role="group" aria-label="바뀐 내용">
+        <div class="mt-diff-line" data-kind="hunk"><span></span><span></span><span>@@ src/feature.py @@</span></div>
+        <div class="mt-diff-line"><span>1</span><span></span><span>def handle(request):</span></div>
+        <div class="mt-diff-line" data-kind="del"><span></span><span>−</span><span>    return None</span></div>
+        <div class="mt-diff-line" data-kind="add"><span>2</span><span>+</span><span>    user = current_user(request)</span></div>
+      </div>
+      <button class="mt-tool" aria-expanded="false" data-status="error" style="border-top: 1px solid var(--line)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4"/></svg><span class="mt-tool-kind">Developer</span><span class="mt-tool-target">셸 · pytest</span><span class="mt-tool-result">실패 · 종료 코드 1</span></button>
+    </div>
+    <div class="mt-code"><div class="mt-code-head"><span>python</span><button class="mt-icon-btn mt-icon-btn--sm mt-icon-btn--quiet" aria-label="코드 복사"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="2"/><path d="M10.5 5.5v-1a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h1"/></svg></button></div><pre>def handle(request):
+    user = current_user(request)
+    return render(user)</pre></div>
+    <div class="mt-approval" role="group" aria-label="승인 요청">
+      <div class="mt-approval-title" role="status"><span class="mt-status" data-status="wait" aria-hidden="true"></span>승인을 기다리는 중입니다</div>
+      <div class="mt-mono" style="font-size: var(--fs-small)">Developer · 셸 · rm -rf build/</div>
+      <span class="mt-row-desc">수동 모드에서는 도구를 쓰기 전에 확인을 받습니다.</span>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap"><button class="mt-btn mt-btn--primary">허용</button><button class="mt-btn">이 채팅에서 항상 허용</button><button class="mt-btn mt-btn--ghost">거부</button></div>
+    </div>
+    <div class="mt-error-card" role="alert">
+      <span class="mt-status" data-status="error" aria-hidden="true"></span>
+      <div class="mt-row-main"><span class="mt-row-title">제공업체가 응답하지 않습니다</span><span class="mt-row-desc">연결 상태를 확인한 뒤 다시 시도하세요. 쓴 내용은 그대로 있습니다.</span></div>
+      <button class="mt-btn mt-btn--sm">다시 시도</button>
+    </div>
+    <div class="mt-divider-note" role="status">대화가 길어져 앞부분을 요약했습니다</div>
+    <div class="mt-notice" role="status">
+      <span class="mt-status" data-status="wait" aria-hidden="true"></span>
+      <span class="mt-grow">최대 턴 수(1000)에 도달해 멈췄습니다.</span>
+      <button class="mt-btn mt-btn--sm">계속</button>
+    </div>
+    <div class="mt-prose"><p class="mt-streaming">테스트를 다시 돌리는 중입니다</p></div>
+    <div class="mt-composer">
+      <textarea rows="2" aria-label="메시지" placeholder="메시지를 입력하세요"></textarea>
+      <div class="mt-composer-bar">
+        <button class="mt-tag mt-tag--lg" aria-haspopup="dialog" aria-expanded="false"><span class="mt-mono">example/model-pro</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button>
+        <span class="mt-tag mt-tag--lg">web-app</span>
+        <span class="mt-grow"></span>
+        <button class="mt-btn mt-btn--primary mt-btn--round" aria-label="전송" aria-disabled="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3M4 7l4-4 4 4"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="g-sec" aria-labelledby="s-dlg">
+  <h2 class="mt-group-title" id="s-dlg">창, 토스트, 빈 상태, 선택 막대 (5.9, 5.10, 5.14)</h2>
+  <div class="g-stage">
+    <div class="mt-dialog" role="group" aria-label="확인 창 예시">
+      <div class="mt-dialog-head"><h2 class="mt-dialog-title">채팅을 삭제할까요?</h2><button class="mt-icon-btn" aria-label="닫기"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
+      <div class="mt-dialog-body"><span>"로그인 오류 수정" 채팅을 삭제합니다. 이 동작은 되돌릴 수 없습니다.</span></div>
+      <div class="mt-dialog-foot"><button class="mt-btn mt-btn--danger">삭제</button><button class="mt-btn">취소</button></div>
+    </div>
+  </div>
+  <div class="mt-card g-box">
+    <div class="mt-toast" role="status" style="position: static; translate: none">저장했습니다.</div>
+    <div class="mt-bulkbar" role="toolbar" aria-label="선택한 채팅"><span style="font-weight: 600">2개 선택됨</span><button class="mt-btn mt-btn--sm">내보내기</button><button class="mt-btn mt-btn--sm mt-btn--danger">삭제</button><button class="mt-btn mt-btn--sm mt-btn--ghost">선택 해제</button></div>
+  </div>
+  <div class="mt-card mt-empty"><span class="mt-heading">저장된 레시피가 없습니다</span><span class="mt-caption">자주 하는 작업을 레시피로 저장하면 여기에 표시됩니다.</span><button class="mt-btn" style="margin-top: 8px">레시피 생성…</button></div>
+</section>
+
+</div>
+</div>
+<script>
+// 견본을 눌러 볼 수 있게 하는 최소한의 동작이다. 앱에서는 Radix 부품이 이 일을 한다.
+document.addEventListener('click', function (e) {
+  var t = e.target.closest('[data-toggle]');
+  if (t) { var a = 'aria-' + t.getAttribute('data-toggle'); t.setAttribute(a, t.getAttribute(a) === 'true' ? 'false' : 'true'); return; }
+  var g = e.target.closest('[data-group], #theme');
+  var item = g && e.target.closest('[role="radio"], [role="tab"], [role="option"]');
+  if (item) {
+    var attr = item.getAttribute('role') === 'tab' ? 'aria-selected' : 'aria-checked';
+    g.querySelectorAll('[role="radio"], [role="tab"], [role="option"]').forEach(function (n) { n.setAttribute(attr, n === item ? 'true' : 'false'); });
+    if (item.dataset.themeValue) document.getElementById('root').setAttribute('data-theme', item.dataset.themeValue);
+  }
+});
+</script>
+</body>
+</html>

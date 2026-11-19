@@ -1,0 +1,306 @@
+/* Metis 컴포넌트 스타일 (docs/design/DESIGN.md 4~5장을 그대로 옮긴 참조 구현)
+ *
+ * 쓰는 법
+ *   1) metis-tokens.css를 먼저 불러오고 이 파일을 불러온다.
+ *   2) 앱의 루트 요소에 class="mt-root"와 data-theme="light | dark"를 준다.
+ *   3) 컴포넌트에 mt- 클래스를 붙인다. 보기: gallery.html, 리액트 예: README.md
+ *
+ * 상태는 표준 속성과 Radix 속성을 둘 다 받는다.
+ *   켜짐·선택: aria-checked / aria-selected / aria-pressed / aria-current, 또는 data-state="checked | on | active | open"
+ *   메뉴 항목 강조: data-highlighted (없으면 :hover, :focus-visible)
+ *   쓸 수 없음: :disabled / aria-disabled="true" / data-disabled
+ *   잘못된 값: aria-invalid="true"
+ *
+ * 값은 모두 토큰이다. 이 파일에 색상 값을 직접 쓰지 않는다.
+ * Tailwind로 옮길 때는 DESIGN.md 11.2의 이름을 쓴다. 이 파일과 Tailwind 클래스를 한 컴포넌트에 섞지 않는다. */
+
+/* ── 바탕 ─────────────────────────────────────────── */
+.mt-root { font-family: var(--font-ui); font-size: var(--fs-body); line-height: 1.5; letter-spacing: -.006em; color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; overflow-wrap: break-word; }
+.mt-root:lang(ko) { word-break: keep-all; }
+:where(.mt-root) *, :where(.mt-root) *::before, :where(.mt-root) *::after { box-sizing: border-box; }
+:where(.mt-root) :where(button, input, textarea) { font: inherit; letter-spacing: inherit; color: inherit; }
+:where(.mt-root) :where(button) { border: 0; background: none; padding: 0; cursor: default; }
+.mt-root ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+.mt-root :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.mt-root ::placeholder { color: var(--mute); opacity: 1; }
+:where(.mt-root) svg { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.mt-scroll { overflow: auto; scrollbar-width: thin; scrollbar-color: var(--mute) transparent; }
+.mt-mono { font-family: var(--font-mono); font-variant-ligatures: none; }
+.mt-num { font-variant-numeric: tabular-nums; }
+
+/* ── 글자 ─────────────────────────────────────────── */
+.mt-display { margin: 0; font-size: var(--fs-display); line-height: 32px; font-weight: 700; letter-spacing: -.02em; }
+.mt-heading { margin: 0; font-size: var(--fs-heading); line-height: 20px; font-weight: 600; }
+.mt-caption { font-size: var(--fs-caption); line-height: 14px; color: var(--mute); }
+.mt-group-title { font-size: var(--fs-caption); line-height: 14px; font-weight: 600; color: var(--mute); }
+.mt-link { color: var(--atext); text-decoration: underline; text-underline-offset: 2px; }
+.mt-kbd { font-size: var(--fs-caption); color: var(--text2); white-space: nowrap; }
+
+/* ── 버튼 (5.1) ───────────────────────────────────── */
+.mt-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: var(--h-control); padding: 0 12px; border-radius: var(--r-full); background: var(--fill); color: var(--text); font-weight: 500; white-space: nowrap; user-select: none; transition: background-color var(--dur-state), opacity var(--dur-state); }
+.mt-btn:hover { background: var(--fill2); }
+.mt-btn:active { background: var(--fill3); scale: .98; }
+.mt-btn--sm { height: var(--h-control-sm); padding: 0 10px; font-size: var(--fs-small); }
+.mt-btn--primary { background: var(--btn); color: var(--btn-ink); font-weight: 600; }
+.mt-btn--primary:hover { background: var(--btn); opacity: .88; }
+.mt-btn--primary:active { background: var(--btn); }
+.mt-btn--danger { background: var(--dsoft); color: var(--danger); }
+.mt-btn--danger:hover, .mt-btn--danger:active { background: color-mix(in srgb, var(--danger) 18%, transparent); }
+.mt-btn--ghost { background: transparent; color: var(--text2); }
+.mt-btn--ghost:hover { background: var(--fill); }
+.mt-btn[data-state="open"], .mt-btn[aria-expanded="true"] { background: var(--fill2); }
+.mt-btn--round { width: var(--h-control); padding: 0; }
+.mt-btn[data-loading]::before { content: ""; width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: mt-spin .8s linear infinite; }
+.mt-btn[data-loading] { pointer-events: none; }
+
+/* 아이콘만 있는 버튼. aria-label과 툴팁이 꼭 있어야 한다 */
+.mt-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: var(--h-icon-btn); height: var(--h-icon-btn); border-radius: var(--r-full); color: var(--text2); transition: background-color var(--dur-state), color var(--dur-state); }
+.mt-icon-btn:hover { background: var(--fill2); color: var(--text); }
+.mt-icon-btn:active { background: var(--fill3); }
+.mt-icon-btn--sm { width: 26px; height: 26px; }
+.mt-icon-btn--quiet { color: var(--mute); }
+.mt-icon-btn[aria-pressed="true"], .mt-icon-btn[data-state="on"] { background: var(--fill3); color: var(--text); box-shadow: inset 0 0 0 1px var(--ctl-line); }
+.mt-icon-btn[aria-expanded="true"], .mt-icon-btn[data-state="open"] { background: var(--fill2); color: var(--text); }
+
+.mt-root :is(.mt-btn, .mt-icon-btn, .mt-input, .mt-select, .mt-switch, .mt-checkbox, .mt-option, .mt-seg-item, .mt-menu-item, .mt-nav-item, .mt-tag, .mt-tab):is(:disabled, [aria-disabled="true"], [data-disabled]) { opacity: .42; pointer-events: none; }
+
+/* ── 입력 (5.2) ───────────────────────────────────── */
+.mt-field { display: flex; flex-direction: column; gap: 6px; }
+.mt-label { font-size: var(--fs-small); line-height: 16px; font-weight: 600; color: var(--text2); }
+.mt-help { font-size: var(--fs-caption); line-height: 14px; color: var(--mute); }
+.mt-error { font-size: var(--fs-caption); line-height: 14px; color: var(--danger); }
+.mt-input { width: 100%; height: var(--h-control); padding: 0 10px; border: 0; border-radius: var(--r-sm); background: var(--fill); box-shadow: inset 0 0 0 1px var(--ctl-line); transition: box-shadow var(--dur-state), background-color var(--dur-state); }
+.mt-input:hover { box-shadow: inset 0 0 0 1px var(--mute); }
+.mt-input:focus, .mt-input:focus-visible { background: var(--panel); box-shadow: inset 0 0 0 1px var(--ring); outline: 2px solid var(--ring); outline-offset: 0; }
+.mt-input[aria-invalid="true"] { box-shadow: inset 0 0 0 2px var(--danger); }
+textarea.mt-input { height: auto; min-height: 76px; padding: 8px 10px; resize: vertical; line-height: 1.5; }
+.mt-input--search { border-radius: var(--r-full); padding: 0 14px; }
+.mt-input--num { width: 112px; text-align: right; font-variant-numeric: tabular-nums; }
+.mt-input-row { display: flex; align-items: center; gap: 8px; }
+.mt-input-row > .mt-input { flex: 1; min-width: 0; }
+
+/* ── 선택 컨트롤 (5.3) ────────────────────────────── */
+.mt-switch { display: inline-flex; align-items: center; width: 38px; height: 22px; padding: 2px; border-radius: var(--r-full); background: var(--fill3); box-shadow: inset 0 0 0 1px var(--ctl-line); flex: none; transition: background-color var(--dur-modal); }
+.mt-switch-thumb { display: block; width: 18px; height: 18px; border-radius: 50%; background: var(--on-accent); box-shadow: 0 0 0 1px var(--ctl-line); transition: translate var(--dur-modal) var(--ease); }
+.mt-switch:is([aria-checked="true"], [data-state="checked"]) { background: var(--accent); box-shadow: none; }
+.mt-switch:is([aria-checked="true"], [data-state="checked"]) .mt-switch-thumb { translate: 16px 0; box-shadow: none; }
+
+.mt-checkbox { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: var(--r-xs); background: var(--panel); box-shadow: inset 0 0 0 1px var(--ctl-line); color: transparent; flex: none; }
+.mt-checkbox svg { width: 12px; height: 12px; stroke-width: 2.4; }
+.mt-checkbox:is([aria-checked="true"], [data-state="checked"]) { background: var(--accent); box-shadow: none; color: var(--on-accent); }
+
+.mt-radio { display: block; width: 16px; height: 16px; border-radius: 50%; background: var(--panel); box-shadow: inset 0 0 0 1px var(--ctl-line); flex: none; }
+:is([aria-checked="true"], [data-state="checked"]) > .mt-radio, .mt-radio:is([aria-checked="true"], [data-state="checked"]) { box-shadow: inset 0 0 0 5px var(--accent); }
+
+/* 설명이 붙는 선택지 */
+.mt-option { display: flex; align-items: flex-start; gap: 10px; width: 100%; padding: 10px 12px; border-radius: var(--r-md); background: var(--group); text-align: left; transition: background-color var(--dur-state); }
+.mt-option:hover { background: var(--fill); }
+.mt-option:is([aria-checked="true"], [data-state="checked"]) { background: var(--sel); box-shadow: inset 0 0 0 1px var(--ctl-line); }
+.mt-option > .mt-radio { margin-top: 2px; }
+
+.mt-seg { display: inline-flex; align-items: center; gap: 2px; height: var(--h-control); padding: 2px; border-radius: var(--r-full); background: var(--fill); }
+.mt-seg-item { height: var(--h-control-sm); padding: 0 12px; border-radius: var(--r-full); font-size: var(--fs-small); color: var(--text2); white-space: nowrap; transition: background-color var(--dur-state); }
+.mt-seg-item:hover { color: var(--text); }
+.mt-seg-item:is([aria-checked="true"], [data-state="on"], [data-state="checked"]) { background: var(--segsel); color: var(--text); font-weight: 600; box-shadow: 0 0 0 1px var(--ctl-line); }
+
+.mt-select { display: inline-flex; align-items: center; justify-content: space-between; gap: 8px; height: var(--h-control); min-width: 120px; padding: 0 8px 0 12px; border-radius: var(--r-full); background: var(--fill); box-shadow: inset 0 0 0 1px var(--ctl-line); white-space: nowrap; transition: background-color var(--dur-state); }
+.mt-select:hover { background: var(--fill2); }
+.mt-select:is([aria-expanded="true"], [data-state="open"]) { background: var(--fill2); }
+.mt-select svg { color: var(--mute); transition: rotate var(--dur-state); }
+.mt-select:is([aria-expanded="true"], [data-state="open"]) svg { rotate: 180deg; }
+
+/* ── 메뉴와 팝오버 (5.4) ──────────────────────────── */
+.mt-menu { display: flex; flex-direction: column; gap: 2px; min-width: 200px; max-width: 320px; padding: 4px; border-radius: var(--r-md); background: var(--panel); box-shadow: var(--pop); z-index: var(--z-menu); }
+.mt-menu-item { display: flex; align-items: center; gap: 8px; width: 100%; min-height: var(--h-menu-item); padding: 4px 10px; border-radius: var(--r-sm); text-align: left; }
+.mt-menu-item:is(:hover, :focus-visible, [data-highlighted]) { background: var(--fill2); outline: 0; }
+.mt-menu-item:active { background: var(--fill3); }
+.mt-menu-item svg { color: var(--text2); }
+.mt-menu-item--danger, .mt-menu-item--danger svg { color: var(--danger); }
+.mt-menu-item--danger:is(:hover, :focus-visible, [data-highlighted]) { background: var(--dsoft); }
+.mt-menu-check { width: 16px; visibility: hidden; }
+.mt-menu-item:is([aria-checked="true"], [aria-current="true"], [data-state="checked"]) .mt-menu-check { visibility: visible; }
+.mt-menu-label { padding: 6px 10px 2px; font-size: var(--fs-caption); font-weight: 600; color: var(--mute); }
+.mt-menu-sep { height: 1px; margin: 2px 6px; background: var(--line); }
+
+/* ── 카드와 행 (5.5) ──────────────────────────────── */
+.mt-card { border: 1px solid var(--line); border-radius: var(--r-md); background: var(--panel); }
+.mt-card--hover:hover { border-color: var(--ctl-line); }
+.mt-card:is([aria-selected="true"], [data-selected]) { background: var(--sel); border-color: var(--ctl-line); }
+.mt-row { display: flex; align-items: center; gap: 12px; min-height: var(--h-row); padding: 8px 14px; }
+.mt-row + .mt-row { border-top: 1px solid var(--line); }
+.mt-row-main { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.mt-row-title { font-weight: 500; }
+.mt-row-desc { font-size: var(--fs-caption); line-height: 14px; color: var(--mute); }
+.mt-row-actions { display: flex; align-items: center; gap: 8px; flex: none; }
+.mt-empty { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 28px 16px; text-align: center; }
+
+/* ── 사이드바 (5.6) ───────────────────────────────── */
+.mt-nav-item { position: relative; display: flex; align-items: center; gap: 8px; width: 100%; height: var(--h-nav); padding: 0 10px; border-radius: var(--r-sm); text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mt-nav-item svg { color: var(--text2); }
+.mt-nav-item:hover { background: var(--hover); }
+.mt-nav-item:active { background: var(--sel); }
+.mt-nav-item:is([aria-current="page"], [aria-selected="true"], [data-state="active"]) { background: var(--sel); font-weight: 500; }
+.mt-nav-item:is([aria-current="page"], [aria-selected="true"], [data-state="active"])::before { content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px; border-radius: 0 2px 2px 0; background: var(--text); }
+.mt-section-title { display: flex; align-items: center; gap: 4px; height: 28px; padding: 0 6px; border-radius: var(--r-sm); font-size: var(--fs-caption); font-weight: 600; color: var(--mute); }
+.mt-section-title:hover { background: var(--hover); }
+
+/* ── 태그, 탭 (5.7, 5.8) ──────────────────────────── */
+.mt-tag { display: inline-flex; align-items: center; gap: 6px; height: var(--h-control-sm); padding: 0 10px; border-radius: var(--r-full); background: var(--fill); color: var(--text2); font-size: var(--fs-small); white-space: nowrap; max-width: 100%; }
+button.mt-tag:hover { background: var(--fill2); }
+button.mt-tag:active { background: var(--fill3); }
+.mt-tag:is([aria-expanded="true"], [data-state="open"]) { background: var(--fill2); color: var(--text); }
+.mt-tag--lg { height: var(--h-control); }
+.mt-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
+.mt-tab { position: relative; height: 42px; padding: 0 12px; font-size: var(--fs-small); color: var(--text2); }
+.mt-tab:hover { color: var(--text); }
+.mt-tab:is([aria-selected="true"], [data-state="active"]) { color: var(--text); font-weight: 600; }
+.mt-tab:is([aria-selected="true"], [data-state="active"])::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: -1px; height: 2px; background: var(--text); }
+
+/* ── 창 (5.9) ─────────────────────────────────────── */
+.mt-scrim { position: fixed; inset: var(--h-titlebar) 0 0 0; background: var(--scrim); z-index: var(--z-modal-scrim); }
+.mt-dialog { display: flex; flex-direction: column; width: min(540px, calc(100% - 24px)); max-height: calc(100% - 40px); border-radius: var(--r-lg); background: var(--panel); box-shadow: var(--shadow); z-index: var(--z-modal); }
+.mt-dialog-head { display: flex; align-items: center; gap: 8px; padding: 16px 12px 8px 20px; }
+.mt-dialog-title { flex: 1; margin: 0; font-size: var(--fs-heading); line-height: 20px; font-weight: 600; }
+.mt-dialog-body { display: flex; flex-direction: column; gap: 14px; padding: 4px 20px 20px; overflow: auto; }
+.mt-dialog-foot { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; padding: 12px 20px 20px; }
+.mt-dialog-foot > .mt-push-left { margin-right: auto; }
+
+/* ── 토스트, 툴팁 (5.10) ──────────────────────────── */
+.mt-toast { position: fixed; top: 56px; left: 50%; translate: -50% 0; max-width: calc(100% - 32px); padding: 8px 16px; border-radius: var(--r-full); background: var(--text); color: var(--bg); font-weight: 500; text-align: center; box-shadow: var(--pop); z-index: var(--z-toast); }
+.mt-tooltip { padding: 4px 8px; border-radius: var(--r-xs); background: var(--tip); color: var(--tip-ink); font-size: var(--fs-caption); line-height: 14px; white-space: nowrap; box-shadow: 0 0 0 1px var(--ctl-line); z-index: var(--z-tooltip); }
+
+/* ── 상태 표시 (5.11). 색과 모양이 함께 다르다 ─────── */
+.mt-status { display: inline-block; width: 8px; height: 8px; flex: none; border-radius: 50%; }
+.mt-status[data-status="run"] { border: 2px solid var(--accent); border-right-color: transparent; animation: mt-spin 1s linear infinite; }
+.mt-status[data-status="wait"] { border-radius: 2px; background: var(--warn); }
+.mt-status[data-status="done"] { background: var(--ok); }
+.mt-status[data-status="off"] { border: 2px solid var(--mute); }
+.mt-status[data-status="error"] { border-radius: 0; rotate: 45deg; background: var(--danger); }
+
+/* ── 진행 (3.8, 6.5) ──────────────────────────────── */
+.mt-runbar { height: 2px; background: var(--line); overflow: hidden; }
+.mt-runbar > i { display: block; width: 35%; height: 100%; background: var(--accent); animation: mt-slide 1.8s ease-in-out infinite alternate; }
+.mt-progress { height: 6px; border-radius: var(--r-full); background: var(--fill2); overflow: hidden; }
+.mt-progress > i { display: block; height: 100%; border-radius: var(--r-full); background: var(--accent); }
+.mt-typing { display: inline-flex; gap: 4px; padding: 6px 0; }
+.mt-typing > i { width: 6px; height: 6px; border-radius: 50%; background: var(--mute); animation: mt-blink 1.2s infinite both; }
+.mt-typing > i:nth-child(2) { animation-delay: .15s; }
+.mt-typing > i:nth-child(3) { animation-delay: .3s; }
+
+/* ── 채팅 입력창 (5.12) ───────────────────────────── */
+.mt-composer { display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: var(--r-lg); background: var(--panel); box-shadow: 0 0 0 1px var(--ctl-line), var(--lift); }
+.mt-composer:focus-within { outline: 2px solid var(--ring); outline-offset: 0; box-shadow: var(--lift); }
+.mt-composer textarea { width: 100%; min-height: 40px; padding: 2px 4px; border: 0; outline: 0; background: transparent; resize: none; line-height: 1.5; field-sizing: content; max-height: 180px; } /* design-check-ignore: 포커스 표시는 바깥 상자(.mt-composer:focus-within)가 그린다 */
+.mt-composer-bar { display: flex; align-items: center; gap: 6px; }
+.mt-composer-bar > .mt-grow { flex: 1; }
+.mt-chip { display: inline-flex; align-items: center; gap: 6px; height: var(--h-control-sm); padding: 0 4px 0 10px; border-radius: var(--r-sm); background: var(--fill); font-size: var(--fs-small); }
+
+/* ── 대화 요소 (5.13) ─────────────────────────────── */
+.mt-bubble { align-self: flex-end; max-width: 86%; padding: 8px 14px; border-radius: var(--r-bubble) var(--r-bubble) var(--r-xs) var(--r-bubble); background: var(--bubble); white-space: pre-wrap; }
+.mt-prose { max-width: 68ch; }
+.mt-prose > * { margin: 0; }
+.mt-prose > * + * { margin-top: 8px; }
+.mt-prose h1 { font-size: var(--fs-subtitle); line-height: 22px; font-weight: 600; }
+.mt-prose h2 { font-size: var(--fs-heading); line-height: 20px; font-weight: 600; }
+.mt-prose h3 { font-size: var(--fs-body); font-weight: 600; }
+.mt-prose :is(h1, h2, h3):not(:first-child) { margin-top: 16px; }
+.mt-prose :is(ul, ol) { padding-left: 20px; }
+.mt-prose a { color: var(--atext); text-decoration: underline; text-underline-offset: 2px; }
+.mt-prose :not(pre) > code { padding: 0 4px; border-radius: var(--r-xs); background: var(--fill); font-family: var(--font-mono); font-size: var(--fs-small); }
+.mt-prose blockquote { padding-left: 12px; border-left: 2px solid var(--line); color: var(--text2); }
+.mt-prose hr { height: 1px; margin: 12px 0; border: 0; background: var(--line); }
+.mt-prose table { border-collapse: collapse; display: block; overflow-x: auto; }
+.mt-prose :is(th, td) { padding: 6px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+.mt-prose th { font-size: var(--fs-small); font-weight: 600; color: var(--mute); }
+
+.mt-code { border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; max-width: 68ch; }
+.mt-code-head { display: flex; align-items: center; justify-content: space-between; padding: 2px 4px 2px 12px; border-bottom: 1px solid var(--line); background: var(--code); font-family: var(--font-mono); font-size: var(--fs-small); color: var(--mute); }
+.mt-code pre { margin: 0; padding: 10px 12px; background: var(--code); font-family: var(--font-mono); font-size: var(--fs-small); line-height: 16px; overflow-x: auto; white-space: pre; }
+.mt-diff { padding: 8px 0; background: var(--code); font-family: var(--font-mono); font-size: var(--fs-small); line-height: 20px; overflow-x: auto; }
+.mt-diff-line { display: flex; gap: 8px; padding: 0 12px; white-space: pre; }
+.mt-diff-line > :first-child { width: 28px; text-align: right; color: var(--mute); user-select: none; }
+.mt-diff-line > :nth-child(2) { width: 10px; user-select: none; }
+.mt-diff-line[data-kind="add"] { background: var(--add-bg); color: var(--add-tx); }
+.mt-diff-line[data-kind="del"] { background: var(--del-bg); color: var(--del-tx); }
+.mt-diff-line[data-kind="hunk"] { color: var(--mute); }
+
+.mt-step { display: flex; align-items: flex-start; gap: 10px; padding: 4px 0; }
+.mt-step-mark { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; margin-top: 2px; border-radius: 50%; border: 2px solid var(--mute); flex: none; color: transparent; }
+.mt-step-mark svg { width: 10px; height: 10px; stroke-width: 2.4; }
+.mt-step[data-status="done"] .mt-step-mark { background: var(--ok); border-color: var(--ok); color: var(--panel); }
+.mt-step[data-status="now"] .mt-step-mark { border-color: color-mix(in srgb, var(--accent) 24%, transparent); border-top-color: var(--accent); animation: mt-spin .8s linear infinite; }
+.mt-step[data-status="paused"] .mt-step-mark { border-color: var(--warn); }
+.mt-step[data-status="todo"] { color: var(--text2); }
+
+.mt-tool { display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 14px; text-align: left; }
+.mt-tool:hover { background: var(--hover); }
+.mt-tool > svg { color: var(--mute); transition: rotate var(--dur-state); }
+.mt-tool[aria-expanded="true"] > svg { rotate: 90deg; }
+.mt-tool-kind { width: 78px; flex: none; font-size: var(--fs-caption); color: var(--mute); }
+.mt-tool-target { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-mono); font-size: var(--fs-small); }
+.mt-tool-result { flex: none; font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--mute); }
+.mt-tool[data-status="error"] .mt-tool-result { color: var(--danger); }
+
+.mt-approval { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border: 1px solid var(--warn); border-radius: var(--r-md); background: var(--panel); }
+.mt-approval-title { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--warn); }
+.mt-error-card { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border: 1px solid var(--danger); border-radius: var(--r-md); background: var(--panel); }
+.mt-error-card .mt-status { margin-top: 6px; }
+/* 화면 전체 안내(6.5)와 대화 안의 알림(컨텍스트 압축, 최대 턴 도달) */
+.mt-notice { display: flex; align-items: center; gap: 10px; min-height: var(--h-row); padding: 8px 14px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--panel); }
+.mt-notice > .mt-grow { flex: 1; min-width: 0; }
+.mt-divider-note { display: flex; align-items: center; gap: 10px; font-size: var(--fs-caption); color: var(--mute); }
+.mt-divider-note::before, .mt-divider-note::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+/* 생각 과정: 접힌 채로 시작한다 */
+.mt-thinking > summary { display: inline-flex; align-items: center; gap: 6px; height: var(--h-control-sm); padding: 0 8px; border-radius: var(--r-sm); font-size: var(--fs-small); color: var(--mute); list-style: none; cursor: default; }
+.mt-thinking > summary::-webkit-details-marker { display: none; }
+.mt-thinking > summary:hover { background: var(--hover); color: var(--text2); }
+.mt-thinking > summary svg { transition: rotate var(--dur-state); }
+.mt-thinking[open] > summary svg { rotate: 90deg; }
+.mt-thinking > div { margin: 4px 0 0 8px; padding-left: 12px; border-left: 2px solid var(--line); color: var(--text2); font-size: var(--fs-small); line-height: 20px; }
+.mt-streaming::after { content: ""; display: inline-block; width: 2px; height: 14px; margin-left: 2px; vertical-align: -2px; background: var(--accent); animation: mt-blink 1s steps(2) infinite; }
+
+/* 파일 트리 */
+.mt-tree-item { position: relative; display: flex; align-items: center; gap: 6px; width: 100%; height: 28px; padding: 0 8px 0 calc(8px + var(--depth, 0) * 16px); border-radius: var(--r-sm); text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mt-tree-item:hover { background: var(--hover); }
+.mt-tree-item[aria-selected="true"] { background: var(--sel); font-weight: 500; }
+.mt-tree-item[aria-selected="true"]::before { content: ""; position: absolute; left: 0; top: 6px; bottom: 6px; width: 2px; border-radius: 0 2px 2px 0; background: var(--text); }
+.mt-tree-item[aria-expanded="true"] > svg:first-child { rotate: 90deg; }
+
+/* 여러 개를 골랐을 때 뜨는 막대 */
+.mt-bulkbar { display: inline-flex; align-items: center; gap: 8px; max-width: calc(100% - 32px); padding: 8px 8px 8px 16px; border-radius: var(--r-full); background: var(--panel); box-shadow: 0 0 0 1px var(--ctl-line), var(--pop); z-index: var(--z-raised); }
+
+@keyframes mt-spin { to { rotate: 360deg; } }
+@keyframes mt-slide { from { translate: -100% 0; } to { translate: 290% 0; } }
+@keyframes mt-blink { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+
+/* ── 움직임 줄이기: 움직임만 끄고 표시는 남긴다 ─────── */
+@media (prefers-reduced-motion: reduce) {
+  .mt-root *, .mt-root *::before, .mt-root *::after { animation: none !important; transition: none !important; }
+  .mt-runbar > i { width: 100%; translate: none; }
+  .mt-step[data-status="now"] .mt-step-mark { border-color: var(--accent); }
+  .mt-typing > i, .mt-streaming::after { opacity: 1; }
+}
+
+/* ── 고대비(Windows 대비 테마) ─────────────────────── */
+@media (forced-colors: active) {
+  .mt-root :is(.mt-btn, .mt-icon-btn, .mt-input, .mt-select, .mt-seg, .mt-option, .mt-menu, .mt-menu-item, .mt-card, .mt-dialog, .mt-toast, .mt-tooltip, .mt-tag, .mt-composer, .mt-bubble, .mt-code, .mt-notice, .mt-bulkbar, .mt-nav-item) { outline: 1px solid transparent; outline-offset: -1px; }
+  .mt-root :focus-visible, .mt-input:focus, .mt-composer:focus-within { outline: 2px solid Highlight; }
+  .mt-root :is(.mt-switch, .mt-switch-thumb, .mt-checkbox, .mt-radio, .mt-seg-item, .mt-nav-item, .mt-tab, .mt-icon-btn, .mt-btn--primary, .mt-status, .mt-step-mark, .mt-runbar > i, .mt-progress > i, .mt-tree-item, .mt-option) { forced-color-adjust: none; }
+  .mt-switch { background: Canvas; box-shadow: none; outline: 1px solid ButtonText; }
+  .mt-switch-thumb { background: ButtonText; box-shadow: none; }
+  .mt-switch:is([aria-checked="true"], [data-state="checked"]) { background: Highlight; }
+  .mt-switch:is([aria-checked="true"], [data-state="checked"]) .mt-switch-thumb { background: HighlightText; }
+  .mt-checkbox, .mt-radio { background: Canvas; box-shadow: none; outline: 1px solid ButtonText; }
+  .mt-checkbox:is([aria-checked="true"], [data-state="checked"]) { background: Highlight; color: HighlightText; }
+  :is([aria-checked="true"], [data-state="checked"]) > .mt-radio, .mt-radio:is([aria-checked="true"], [data-state="checked"]) { box-shadow: inset 0 0 0 5px Highlight; }
+  .mt-option { background: Canvas; color: CanvasText; outline: 1px solid ButtonText; }
+  .mt-seg-item, .mt-nav-item, .mt-tab, .mt-tree-item, .mt-icon-btn { background: Canvas; color: ButtonText; }
+  :is(.mt-seg-item, .mt-nav-item, .mt-tab, .mt-tree-item, .mt-icon-btn):is([aria-checked="true"], [aria-selected="true"], [aria-current="page"], [aria-pressed="true"], [data-state="on"], [data-state="active"], [data-state="checked"]) { background: Highlight; color: HighlightText; box-shadow: none; }
+  .mt-nav-item svg { color: inherit; }
+  .mt-btn--primary { background: ButtonText; color: Canvas; }
+  .mt-status, .mt-runbar > i, .mt-progress > i { background: ButtonText; border-color: ButtonText; }
+  .mt-status[data-status="run"] { background: Canvas; border-right-color: Canvas; }
+  .mt-status[data-status="off"] { background: Canvas; }
+  .mt-step-mark { border-color: ButtonText; background: Canvas; color: Canvas; }
+  .mt-step[data-status="done"] .mt-step-mark { background: ButtonText; }
+}

@@ -1,0 +1,143 @@
+/* Metis 디자인 토큰. 기준일 2026-11-20 (3차)
+ * 값의 원본은 이 파일이다. docs/design/DESIGN.md 3장의 표는 이 파일에서 만든다.
+ * 값을 바꾸거나 더할 때는 DESIGN.md 3장, 10.1의 대비 표, 14장을 함께 고친다.
+ * 테마는 루트 요소의 data-theme(light | dark | aura)로 고른다.
+ * Aura: 색 값을 정하지 않는다. 앱의 기존 Aura 값을 유지하고, 여기 있는 새 토큰은 라이트 값을 물려받는다(DESIGN.md 3.1).
+ * 저장소에 이미 테마 변수 체계가 있으면 이 파일을 그대로 넣지 말고, 기존 변수의 값을 여기에 맞춘다(DESIGN.md 11.2). */
+
+:root,
+[data-theme="light"],
+[data-theme="aura"] {
+  --bg: #F5F5F6;
+  --side: #FFFFFF;
+  --panel: #FFFFFF;
+  --line: #E8E8EA;
+  --ctl-line: rgba(0,0,0,.45);
+  --text: #111214;
+  --text2: #3F4146;
+  --mute: #62666E;
+  --fill: rgba(0,0,0,.06);
+  --fill2: rgba(0,0,0,.1);
+  --fill3: rgba(0,0,0,.15);
+  --group: rgba(0,0,0,.035);
+  --sel: #F1F1F3;
+  --hover: rgba(17,18,20,.05);
+  --segsel: #FFFFFF;
+  --accent: #0A72E8;
+  --on-accent: #FFFFFF;
+  --atext: #0A64D2;
+  --ring: #0A72E8;
+  --soft: rgba(10,114,232,.09);
+  --btn: #111214;
+  --btn-ink: #FFFFFF;
+  --bubble: #EDEDEF;
+  --code: #F7F7F8;
+  --ok: #0B7A4B;
+  --warn: #9A5A00;
+  --danger: #C62828;
+  --dsoft: rgba(198,40,40,.09);
+  --add-bg: #E3F6EC;
+  --add-tx: #0A5C3A;
+  --del-bg: #FCE8E8;
+  --del-tx: #A32B2B;
+  --tip: #F2F2F2;
+  --tip-ink: rgba(0,0,0,.85);
+  --scrim: rgba(17,18,20,.32);
+  --close-hover: #C42B1C;
+  --segbg: rgba(100,104,112,.13);
+  --pop: 0 10px 30px rgba(17,18,20,.14),0 0 0 1px rgba(17,18,20,.07);
+  --shadow: 0 24px 64px rgba(17,18,20,.2),0 0 0 1px rgba(17,18,20,.06);
+  --lift: 0 8px 24px -10px rgba(0,0,0,.25);
+  color-scheme: light;
+
+  /* 글꼴 (3.2) */
+  --font-ui: Inter, 'Noto Sans KR', 'Malgun Gothic', 'Segoe UI', system-ui, sans-serif;
+  --font-wordmark: Sora, Inter, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, ui-monospace, monospace;
+
+  /* 글자 크기 (3.3). 이 8단계만 쓴다 */
+  --fs-caption: 11px;   /* 줄 높이 14px */
+  --fs-small: 12px;     /* 16px */
+  --fs-body: 13px;      /* 1.5 */
+  --fs-heading: 15px;   /* 20px, 600 */
+  --fs-subtitle: 17px;  /* 22px */
+  --fs-title: 22px;     /* 26px, 700 */
+  --fs-display: 26px;   /* 32px, 700 */
+  --fs-clock: 48px;     /* 52px, 홈 화면의 시각만 */
+
+  /* 높이 (3.4) */
+  --h-control: 28px;
+  --h-control-sm: 24px;
+  --h-icon-btn: 30px;
+  --h-nav: 30px;
+  --h-primary-nav: 34px;
+  --h-menu-item: 28px;
+  --h-row: 44px;
+  --h-titlebar: 44px;
+
+  /* 모서리 (3.5) */
+  --r-xs: 5px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-bubble: 16px;
+  --r-lg: 20px;
+  --r-full: 999px;
+
+  /* 움직임 (3.8) */
+  --dur-fast: .1s;
+  --dur: .16s;
+  --dur-state: .18s;
+  --dur-modal: .2s;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+
+  /* 층 (3.7). 나중에 뜨는 것이 위 */
+  --z-raised: 5;
+  --z-titlebar: 30;
+  --z-modal-scrim: 50;
+  --z-modal: 51;
+  --z-menu: 60;
+  --z-tooltip: 65;
+  --z-toast: 70;
+}
+
+[data-theme="dark"] {
+  --bg: #0F0F10;
+  --side: #19191B;
+  --panel: #161618;
+  --line: #29292C;
+  --ctl-line: rgba(255,255,255,.36);
+  --text: #F4F4F5;
+  --text2: #BDBDC2;
+  --mute: #A1A1A8;
+  --fill: rgba(255,255,255,.08);
+  --fill2: rgba(255,255,255,.13);
+  --fill3: rgba(255,255,255,.19);
+  --group: rgba(255,255,255,.045);
+  --sel: #232326;
+  --hover: rgba(255,255,255,.06);
+  --segsel: #38383C;
+  --accent: #2F8BFF;
+  --atext: #6BB3FF;
+  --ring: #2F8BFF;
+  --soft: rgba(70,150,255,.16);
+  --btn: #F4F4F5;
+  --btn-ink: #111214;
+  --bubble: #242427;
+  --code: #121214;
+  --ok: #4CD3A0;
+  --warn: #F0B24A;
+  --danger: #FF8A80;
+  --dsoft: rgba(255,138,128,.14);
+  --add-bg: rgba(76,211,160,.14);
+  --add-tx: #8BE6C6;
+  --del-bg: rgba(255,138,128,.14);
+  --del-tx: #FFA9A1;
+  --tip: #3A3A3A;
+  --tip-ink: rgba(255,255,255,.9);
+  --scrim: rgba(0,0,0,.58);
+  --segbg: rgba(255,255,255,.08);
+  --pop: 0 10px 30px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.09);
+  --shadow: 0 24px 64px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08);
+  --lift: 0 8px 24px -10px rgba(0,0,0,.6);
+  color-scheme: dark;
+}
