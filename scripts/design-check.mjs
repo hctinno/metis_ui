@@ -228,7 +228,8 @@ function scan(opts) {
         if (r.optOut && opts[r.optOut]) continue;
         for (const hit of r.find(line, ctx)) push(n, r.id, r.level, hit, r.msg);
       }
-      if (known && !isToken) for (const m of line.matchAll(/var\(\s*(--[\w-]+)\s*(?!,)/g)) {   // 대체 값이 있는 var(--x, 값)은 넘어간다
+      if (known && !isToken) for (const m of line.matchAll(/var\(\s*(--[\w-]+)\s*([,)])/g)) {
+        if (m[2] === ',') continue; // 대체 값이 있는 var(--x, 값)은 그 자리에서 정하는 변수다
         if (!known.has(m[1]) && !localVars.has(m[1]) && !/^--(?:tw|radix|color|text|radius|spacing|shadow|font|ease|animate|container|breakpoint|leading|tracking)-/.test(m[1])) push(n, 'unknown-token', 'error', m[1], '토큰 파일에 없는 변수입니다. 토큰을 먼저 추가하세요(DESIGN.md 6.6).');
       }
     });
