@@ -3,9 +3,9 @@
 Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기준 문서**입니다.
 지금 있는 화면뿐 아니라 **앞으로 추가될 화면과 컴포넌트**도 이 문서의 규칙으로 만듭니다.
 
-- 판: 2차 (2026-11-19). 1차와 달라진 점은 14장에 있습니다.
+- 판: 3차 (2026-11-20). 달라진 점은 14장에 있습니다.
 - 앱 구성: React, TypeScript, Tailwind CSS, Radix UI, Vite, Electron (Windows 배포)
-- 함께 있는 파일: `metis-tokens.css`(토큰 값), `metis-final-prototype.html`(보기용 시안), `assets/`(로고), `scripts/design-check.mjs`(자동 검사)
+- 함께 있는 파일: `ui/metis-tokens.css`(토큰 값), `ui/metis-components.css`(컴포넌트 스타일의 참조 구현), `ui/gallery.html`(컴포넌트 견본), `metis-final-prototype.html`(보기용 시안), `assets/`(로고), `scripts/design-check.mjs`(자동 검사)
 
 ## 0. 읽는 법
 
@@ -20,10 +20,11 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
 **무엇이 기준인가**
 
 1. **이 문서가 규칙입니다.** 완료 여부는 이 문서(와 12장의 검사)로 판단합니다.
-2. **토큰 값의 원본은 `metis-tokens.css`입니다.** 이 문서 3장의 표는 그 파일에서 만들어 붙인 것입니다. 둘이 다르면 `metis-tokens.css`가 맞고, 이 문서를 고칩니다.
-3. **시안은 그림입니다.** 규칙이 어떻게 보이는지 확인하는 용도입니다. 시안과 이 문서가 다르면 이 문서를 따르고, 차이를 보고에 적습니다. 시안의 CSS는 여러 겹으로 덮어쓴 것이어서 값을 읽어 옮기지 않습니다. 값은 이 문서와 토큰 파일에서만 가져옵니다.
-4. 이 문서 안에서 규칙이 부딪치면 **원칙(2장) → 토큰(3장) → 상태(4장) → 컴포넌트(5장) → 화면(8장)** 순서로 따릅니다.
-5. 이 문서에 없는 것은 6.6을 따릅니다. 지어내지 않습니다.
+2. **토큰 값의 원본은 `ui/metis-tokens.css`입니다.** 이 문서 3장의 표는 그 파일에서 만들어 붙인 것입니다. 둘이 다르면 토큰 파일이 맞고, 이 문서를 고칩니다.
+3. **`ui/metis-components.css`는 이 문서 4~5장을 CSS로 옮긴 참조 구현**이고, `ui/gallery.html`은 그것을 눌러 볼 수 있는 견본입니다. 컴포넌트의 값이 궁금하면 여기서 봅니다. 이 문서와 다르면 이 문서가 맞습니다(11.6).
+4. **시안은 그림입니다.** 규칙이 어떻게 보이는지 확인하는 용도입니다. 시안과 이 문서가 다르면 이 문서를 따르고, 차이를 보고에 적습니다. 시안의 CSS는 여러 겹으로 덮어쓴 것이어서 값을 읽어 옮기지 않습니다. 값은 이 문서와 토큰 파일에서만 가져옵니다.
+5. 이 문서 안에서 규칙이 부딪치면 **원칙(2장) → 토큰(3장) → 상태(4장) → 컴포넌트(5장) → 화면(8장)** 순서로 따릅니다.
+6. 이 문서에 없는 것은 6.6을 따릅니다. 지어내지 않습니다.
 
 ## 1. 범위
 
@@ -39,6 +40,31 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
 - 테마 선택지 4개(라이트, 다크, Aura, 시스템)와 **Aura 테마의 기존 색 값**(3.1)
 - 번역 구조. 문구를 번역 파일로 옮기는 작업은 이 범위가 아닙니다(9장).
 - 지원 창 크기. 최소 창 크기는 960 x 600px로 보고, 그보다 좁은 화면용 배치는 만들지 않습니다(8.1).
+
+**모습과 동작의 경계**
+
+이 문서에는 모습(스타일) 규칙과 동작 규칙이 함께 있습니다. 이미 만들어진 앱에 적용할 때는 아래처럼 나눕니다.
+
+| 구분 | 해당하는 것 | 적용 |
+|---|---|---|
+| 모습 | 색, 글자, 간격, 모서리, 상태 표현, 배치, 컴포넌트의 생김새, 오류·알림을 보여 주는 자리(7.5) | 바로 적용 |
+| 접근성 보완 | 포커스 표시, 역할과 이름, 키보드 조작, 포커스 이동(10.2, 10.3), 고대비와 움직임 줄이기(10.4) | 바로 적용 |
+| **동작 변경** | 아래 목록. 앱이 지금 하는 일이 달라지는 것 | **기존 동작을 유지합니다.** 0단계 조사에서 현재 동작을 적고, 사람이 승인한 항목만 따로 적용합니다 |
+
+동작 변경 목록(이 문서가 권하는 동작이지만 승인 없이는 바꾸지 않는 것):
+
+1. 승인 카드에 바뀔 내용을 미리 보여 주기(5.13)
+2. "이 채팅에서 항상 허용"의 범위와 해제 방법(5.13)
+3. 실행 중에 Enter를 눌렀을 때의 처리(5.12)
+4. 작성 중인 창을 닫을 때 확인하기(7.4)
+5. 지금 확인 없이 지워지는 것에 확인 창 넣기(7.4)
+6. 입력 값을 확인하는 때와 잘못된 값의 처리(7.4)
+7. 여러 개를 골랐을 때 보이는 항목에만 적용하기(7.2)
+8. 오류 카드의 "다시 시도", 최대 턴 도달 뒤 "계속"(5.13)
+9. 창 너비 960~1240px에서 사이드 패널과 사이드바를 번갈아 보여 주기(8.1)
+10. 13.2에 "넣지 않습니다"로 적힌 새 요소
+
+위 항목의 **모습**(승인 카드의 생김새, 오류 문장의 자리와 색 등)은 "모습"에 속하므로 바로 적용합니다.
 
 **"항목을 없애지 않는다"의 뜻**: 기능을 없애지 않는다는 뜻입니다. 화면에 늘어놓은 버튼을 ⋯ 메뉴 안으로 옮기는 것은 허용합니다(8.11). 옮긴 뒤에도 모든 동작에 닿을 수 있어야 합니다.
 
@@ -92,6 +118,7 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
 | `--hover` | 목록 행 올림 | `rgba(17,18,20,.05)` | `rgba(255,255,255,.06)` |
 | `--segsel` | 구간 선택의 선택 칸 | `#FFFFFF` | `#38383C` |
 | `--accent` | 켜진 토글·체크·라디오, 진행 | `#0A72E8` | `#2F8BFF` |
+| `--on-accent` | 강조색 위의 표시(토글 손잡이, 체크 표시) | `#FFFFFF` | 라이트와 같음 |
 | `--atext` | 링크 글자 | `#0A64D2` | `#6BB3FF` |
 | `--ring` | 포커스 링 | `#0A72E8` | `#2F8BFF` |
 | `--soft` | 예비 | `rgba(10,114,232,.09)` | `rgba(70,150,255,.16)` |
@@ -112,7 +139,7 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
 | `--scrim` | 창 뒤 가림막 | `rgba(17,18,20,.32)` | `rgba(0,0,0,.58)` |
 | `--close-hover` | 창 닫기 버튼 올림 | `#C42B1C` | 라이트와 같음 |
 
-그 밖에 그림자 `--pop`, `--shadow`와 개수 배지 바탕 `--segbg`, 크기·모서리·움직임·층의 이름 붙은 값이 `metis-tokens.css`에 있습니다.
+그 밖에 그림자 `--pop`, `--shadow`, `--lift`(채팅 입력창)와 개수 배지 바탕 `--segbg`, 크기·모서리·움직임·층의 이름 붙은 값이 `metis-tokens.css`에 있습니다.
 
 - 반투명 값(`--fill` 계열, `--hover`, `--ctl-line`)은 어떤 면 위에 올려도 같은 단계로 보이게 하려는 것입니다. Tailwind의 불투명도 수식(`bg-control/50`)을 덧붙이지 않습니다.
 - 강조색 글자는 `--accent`가 아니라 `--atext`를 씁니다(대비 때문).
@@ -167,7 +194,7 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
 
 - 본문 자간 -0.006em. 숫자가 바뀌는 곳(시간, 개수)은 `font-variant-numeric: tabular-nums`.
 - 한국어 화면에서는 단어 중간에서 줄이 바뀌지 않게 합니다(`:lang(ko) { word-break: keep-all }`, `overflow-wrap: break-word`). 다른 언어에는 적용하지 않습니다.
-- **글자 크기 설정**(작게, 기본, 크게): 위 값은 "기본" 기준입니다. 설정을 바꾸면 화면 전체가 같은 비율로 바뀝니다. 컴포넌트는 눈금 이름만 쓰고 비율을 직접 계산하지 않습니다. 앱이 지금 쓰는 적용 방식을 유지합니다.
+- 값은 px로 고정입니다. 받은 화면에는 글자 크기를 바꾸는 설정이 없습니다. 나중에 만든다면 글자만이 아니라 화면 전체의 배율로 적용합니다.
 
 ### 3.4 높이
 
@@ -225,7 +252,7 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
 |---|---|
 | 메뉴, 토스트, 선택 막대 | `--pop` |
 | 창 | `--shadow` |
-| 채팅 입력창 | 1px `--ctl-line` 실선 + `0 8px 24px -10px` 그림자 |
+| 채팅 입력창 | 1px `--ctl-line` 실선 + `--lift` |
 | 툴팁 | 1px `--ctl-line` 실선 + 작은 그림자 |
 | 카드, 버튼, 그 밖의 모든 것 | 없음 |
 
@@ -242,7 +269,7 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
 | 토스트 | `--z-toast` | 70 |
 
 - 메뉴, 팝오버, 창, 툴팁, 토스트는 Radix의 Portal로 `body`에 붙입니다. 이 값은 Portal에 붙은 것끼리의 순서입니다.
-- 창 뒤 가림막은 타이틀바를 덮지 않습니다(위에서 44px 아래부터). 창이 떠 있어도 앱 창을 끌고, 최소화하고, 닫을 수 있어야 합니다.
+- 창 뒤 가림막은 타이틀바를 덮지 않습니다(위에서 44px 아래부터). 창이 떠 있어도 **앱 창을 끌고, 최소화하고, 닫을 수 있어야 합니다.** 타이틀바의 나머지 버튼(사이드바, 새 채팅, 패널)은 창이 떠 있는 동안 눌리지 않고 쓸 수 없음 모습이 됩니다(5.9).
 
 ### 3.8 움직임
 
@@ -292,16 +319,18 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
 | 상태 | 누르는 컨트롤(버튼, 태그) | 값 컨트롤(입력, 드롭다운) | 목록 행(사이드바, 메뉴) | 주요 버튼 |
 |---|---|---|---|---|
 | 기본 | `--fill` | `--fill` + `--ctl-line` 1px 경계선 | 면 없음 | `--btn` 면, `--btn-ink` 글자 |
-| 올림 | `--fill2` | `--fill2` | `--hover` (메뉴 항목은 `--fill2`) | 불투명도 88% |
-| 누름 | `--fill3`, 98% 크기 | `--fill3` | `--sel` (메뉴 항목은 `--fill3`) | 98% 크기 |
-| 키보드 포커스 | 2px `--ring` 외곽선, 바깥으로 2px 띄움 | `--panel` 면 + 안쪽 1px과 바깥 2px `--ring` | 2px `--ring` 외곽선 | 2px `--ring` 외곽선 |
-| 선택됨 | `--fill3` 면, `--text` 글자(켜진 아이콘 버튼) | - | `--sel` 면 + 왼쪽 2px `--text` 막대 + 굵기 500 | - |
+| 올림 | `--fill2` | 입력: 면은 그대로, 경계선이 `--mute`로 진해짐. 드롭다운: `--fill2` | `--hover` (메뉴 항목은 `--fill2`) | 불투명도 88% |
+| 누름 | `--fill3`, 98% 크기 | - | `--sel` (메뉴 항목은 `--fill3`) | 98% 크기 |
+| 키보드 포커스 | 2px `--ring` 외곽선, 바깥으로 2px 띄움 | `--panel` 면 + 2px `--ring` 외곽선(띄움 없음) | 2px `--ring` 외곽선 | 2px `--ring` 외곽선 |
+| 선택됨 | `--fill3` 면 + `--ctl-line` 1px 경계선 + `--text` 글자(켜진 아이콘 버튼) | - | `--sel` 면 + 왼쪽 2px `--text` 막대 + 굵기 500 | - |
 | 열림(메뉴가 붙은 버튼) | `--fill2` 면, `--text` 글자, 화살표 180도 | 같음 | - | - |
 | 잘못된 값 | - | `--danger` 2px 경계선 + 아래에 오류 문장 | - | - |
 | 쓸 수 없음 | 불투명도 42%, 누름 반응 없음 | 같음 | 같음 | 같음 |
 | 처리 중 | 글자 앞에 회전 고리, 다시 누를 수 없음 | - | - | 같음 |
 
 - 켜짐(토글, 체크 상자, 라디오)은 `--accent` 면입니다(5.3).
+- **포커스 표시는 항상 `outline`으로 그립니다.** `box-shadow`로 그리면 Windows의 대비 테마에서 사라집니다. 입력 칸의 글자는 마우스로 눌러도 포커스 표시가 나타납니다.
+- 입력 칸에 올렸을 때 면을 진하게 하지 않는 것은 자리 표시 글자의 대비(4.5:1)를 지키기 위해서입니다.
 - 위험 동작은 `--dsoft` 면과 `--danger` 글자입니다. 올리면 면이 진해집니다. 위험 버튼을 주요 버튼 모양으로 만들지 않습니다.
 - 올림은 마우스가 있을 때만(`@media (hover: hover)`) 적용합니다.
 - **쓸 수 없는 버튼**: 왜 못 쓰는지 사용자가 알 수 있을 때만 씁니다(빈 입력창의 전송). 이유를 알기 어려우면 버튼을 살려 두고, 눌렀을 때 이유를 알려 줍니다. `disabled` 대신 `aria-disabled="true"`를 써서 키보드 포커스가 닿게 합니다.
@@ -329,8 +358,8 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
 
 ### 5.2 입력 (`.inp`)
 
-- 높이 28px, 모서리 8px, `--fill` 면, `--ctl-line` 1px 안쪽 경계선. 올리면 `--fill2`.
-- 포커스: `--panel` 면, 안쪽 1px과 바깥 2px `--ring`.
+- 높이 28px, 모서리 8px, `--fill` 면, `--ctl-line` 1px 안쪽 경계선. 올리면 경계선이 `--mute`로 진해집니다.
+- 포커스: `--panel` 면, 2px `--ring` 외곽선.
 - 자리 표시 글자는 `--mute`(불투명도 100%)입니다.
 - 검색 칸은 모서리 999px, 좌우 14px.
 - 여러 줄 입력은 모서리 8px, 최소 높이 76px.
@@ -393,7 +422,7 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
 - 채팅 행(`.srow`): 한 줄. 제목(넘치면 말줄임)과 시간. 실행 중이나 승인 대기일 때만 앞에 상태 표시(5.11).
 - 채팅 구역이 접혀 있는데 승인을 기다리는 채팅이 있으면, 구역 제목 옆에 "승인 대기 N"을 표시합니다. 접혀 있어도 놓치지 않게 하려는 것입니다.
 - 프로젝트 행: 폴더 아이콘, 이름, 채팅 수. 누르면 아래에 채팅이 들여쓰기로 나옵니다.
-- **사이드바를 접으면** 타이틀바의 사이드바 버튼 옆에 "새 채팅" 아이콘 버튼이 나타납니다. 접힌 상태에서도 새 채팅을 시작할 수 있어야 합니다.
+- **사이드바가 보이지 않을 때**(접었거나, 좁은 창에서 사이드 패널에 자리를 내줬을 때, 8.1)는 타이틀바의 사이드바 버튼 옆에 "새 채팅" 아이콘 버튼이 나타납니다. 승인을 기다리는 채팅이 있으면 사이드바 버튼 모서리에 승인 대기 표시(5.11)가 붙습니다.
 - 설정 화면에서는 사이드바가 설정 분류 목록으로 바뀌고, 사이드바 버튼은 쓸 수 없음 상태가 됩니다(접으면 분류를 옮길 수 없기 때문).
 - Radix: Collapsible(접이식 구역).
 
@@ -412,6 +441,7 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
 - **버튼 줄**: 오른쪽 정렬. **주요 동작이 왼쪽, 취소가 오른쪽**입니다(Windows 관례). 그 창에만 있는 위험 동작(제공업체 삭제)은 맨 왼쪽에 떨어뜨립니다.
 - 열리면 첫 입력(입력이 없으면 버튼 줄의 첫 버튼)으로 포커스가 갑니다. Tab은 창 안에서만 돕니다. 닫히면 창을 연 버튼으로 포커스가 돌아갑니다.
 - Esc, 닫기 버튼, 가림막을 누르면 창이 닫힙니다. 작성 중인 내용이 있으면 7.4의 확인을 거칩니다. **확인 창은 가림막을 눌러도 닫히지 않습니다.** 버튼으로만 답합니다.
+- **창이 떠 있는 동안 창 밖은 눌리지 않습니다.** 타이틀바의 앱 버튼(사이드바, 새 채팅, 패널)도 포함입니다. 예외는 창 끌기와 창 컨트롤(최소화, 최대화, 닫기)뿐입니다. Radix Dialog는 창 밖을 모두 막으므로, 창 컨트롤을 직접 그리는 앱이라면 창 컨트롤이 막히지 않는지 확인하고, 막히면 창 컨트롤을 Dialog가 막는 영역 밖(별도 루트)에 둡니다. `titleBarOverlay`로 운영체제의 컨트롤을 쓰면 해당 없습니다.
 - 창 위에 창을 다시 띄우지 않습니다. 확인이 필요하면 같은 창의 내용을 확인 문장으로 바꿉니다.
 - Radix: Dialog, AlertDialog(확인 창).
 
@@ -456,9 +486,9 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
 - 아래 줄: 모델 태그, 프로젝트 태그, (여백), 익스텐션 태그("익스텐션 N"), 첨부, 전송. 메뉴를 여는 태그에는 모두 아래 화살표가 있습니다.
 - **진행 중인 채팅의 프로젝트는 바꿀 수 없으므로** 누를 수 없는 태그(`span`, 화살표 없음)로 보여 줍니다. 새 채팅에서만 고를 수 있는 버튼입니다.
 - 전송 버튼: 주요 버튼(원형 28px, 아이콘만). 비어 있으면 쓸 수 없음 상태(`aria-disabled="true"`).
-- **실행 중**: 전송 버튼이 중지 버튼으로 바뀝니다. 중지 버튼은 기본 버튼 모양입니다(주요 버튼이 아님). 실행 중에도 글은 쓸 수 있습니다. 실행 중에 Enter를 누르면 **쓴 글을 지우지 않고** "실행이 끝난 뒤에 보낼 수 있습니다"를 알립니다.
+- **실행 중**: 전송 버튼이 중지 버튼으로 바뀝니다. 중지 버튼은 기본 버튼 모양입니다(주요 버튼이 아님). 실행 중에도 글은 쓸 수 있습니다. 실행 중에 Enter를 눌렀을 때의 처리는 앱의 기존 동작을 유지합니다(1장의 동작 변경 3번). 어떤 방식이든 **쓴 글이 사라지면 안 됩니다.** 시안은 보내지 않고 "실행이 끝난 뒤에 보낼 수 있습니다"를 알립니다.
 - 포커스가 들어가면 아래에 단축키 안내가 나타납니다(Enter 전송, Shift+Enter 줄바꿈, / 스킬 부르기).
-- **첨부**: 붙인 파일은 글 쓰는 칸 위에 태그로 쌓입니다(파일 이름, 크기, 지우기 × 버튼). 태그 높이 24px. 시안에는 없습니다.
+- **첨부**: 붙인 파일은 글 쓰는 칸 위에 칩으로 쌓입니다(파일 이름, 크기, 지우기 × 버튼). 높이 24px, 모서리 8px.
 - **/ 메뉴**: 글 맨 앞에서 /를 치면 입력창 위로 스킬 목록 팝오버가 열립니다. 치는 대로 걸러지고, 화살표로 옮기고, Enter로 고르고, Esc로 닫습니다. 5.4의 모습을 씁니다. 시안에는 없습니다.
 
 ### 5.13 대화 요소
@@ -488,14 +518,22 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
   - `--warn` 1px 테두리. 맨 위에 승인 대기 표시와 "승인을 기다리는 중입니다"(`role="status"`).
   - 무엇을 하려는지(호출 내용, 코드 글꼴), **파일을 바꾸는 일이면 바뀔 내용을 diff로 미리 보여 줍니다**, 그리고 왜 묻는지 한 문장.
   - 버튼 셋: "허용"(주요), "이 채팅에서 항상 허용"(기본), "거부"(고스트).
-  - **"이 채팅에서 항상 허용"은 그 채팅에만 적용됩니다.** 다른 채팅과 설정의 기본 모드는 바뀌지 않습니다. 누르면 그 사실을 토스트로 알리고, 채팅 헤더의 모드 태그에 "항상 허용"이 붙습니다.
+  - **"이 채팅에서 항상 허용"**: 그 채팅에서, 해제할 때까지, 도구를 쓸 때마다 묻던 승인을 건너뜁니다. 다른 채팅과 설정의 기본 모드는 바뀌지 않고, 그 채팅의 모드 이름도 바뀌지 않습니다. 누르면 토스트로 알리고, 채팅 헤더의 모드 태그가 "수동 · 항상 허용"처럼 됩니다. **채팅의 ⋯ 메뉴에 "항상 허용 해제"가 생기고**, 누르면 다시 묻습니다.
+  - 앱에 이미 "항상 허용"이 있고 범위가 다르면(예: 그 도구만, 모든 채팅) **앱의 범위를 유지하고 버튼 이름을 그 범위에 맞춥니다**("이 도구 항상 허용" 등). 범위를 이름에 드러내는 것이 규칙입니다.
   - 기다리는 동안: 진행 막대와 점 3개를 숨기고, 진행 중 단계의 고리를 멈춘 주의색 고리로 바꿉니다. 사이드바의 그 채팅에 "승인 대기"가 표시됩니다.
   - 승인 카드가 나타나도 **포커스를 빼앗지 않습니다.** 사용자가 글을 쓰는 중일 수 있습니다.
   - 정해진 시간 뒤에 저절로 허용하거나 거부하지 않습니다.
-- **오류 카드**: 실행이 실패하면 대화 안에 카드로 남깁니다. 오류 표시(마름모) + 무슨 일이 일어났는지 한 문장 + 할 수 있는 일 + "다시 시도" 버튼. `role="alert"`. 토스트로만 알리고 사라지게 하지 않습니다. 시안에는 없습니다.
+- **생각 과정**: 모델의 추론을 보여 줄 때는 답변 위에 접힌 한 줄("생각 과정 · 4초")로 두고, 누르면 펼칩니다. 펼친 내용은 왼쪽 2px `--line` 막대, 12px `--text2`. 기본은 접힘입니다.
+- **작성 중인 답변(스트리밍)**: 글자가 들어오는 끝에 깜빡이는 2px `--accent` 막대를 둡니다. 글자가 들어오는 동안 화면이 저절로 따라 내려가되, 사용자가 위로 올려 읽고 있으면 따라 내려가지 않습니다.
+- **실패한 도구 호출**: 그 행의 결과 요약을 `--danger`로 쓰고("실패 · 종료 코드 1"), 펼치면 오류 출력이 보입니다. 색만이 아니라 "실패"라는 낱말이 함께 있습니다.
+- **하위 에이전트**: 도구 호출 카드의 한 행으로 보여 주고, 펼치면 그 안의 도구 호출이 들여쓰기(16px)로 나옵니다. 새 종류의 카드를 만들지 않습니다.
+- **대화 안의 알림**: 대화 흐름에서 일어난 일(컨텍스트를 요약함)은 가운데 정렬된 11px `--mute` 한 줄과 양옆의 `--line` 선으로 알립니다. 사용자가 정해야 이어지는 일(최대 턴 수에 도달)은 안내 띠(6.5) 모양에 버튼 하나("계속")를 둡니다.
+- **그림·표 같은 출력**: 카드(5.5) 안에 넣고 최대 높이를 정해 넘치면 카드 안에서 스크롤합니다.
+- **오류 카드**: 실행이 실패하면 대화 안에 카드로 남깁니다. 오류 표시(마름모) + 무슨 일이 일어났는지 한 문장 + 할 수 있는 일 + "다시 시도" 버튼. `role="alert"`. 토스트로만 알리고 사라지게 하지 않습니다. 제공업체 오류, 연결 끊김도 이 카드로 알립니다.
 - **답변 아래 동작**: 복사, 같은 요청 다시 실행. `--mute` 색 아이콘 버튼이고 올리면 `--text`.
 - **응답 작성 중**: 점 3개.
-- **파일 트리**(사이드 패널의 파일 탭): 행 높이 28px, 깊이마다 들여쓰기 16px, 폴더는 펼침 화살표, 선택된 파일은 `--sel` 면. 역할은 `tree` + `treeitem`, 화살표 위아래로 옮기고 좌우로 접고 폅니다. 시안에는 없습니다.
+- **파일 트리**(사이드 패널의 파일 탭): 행 높이 28px, 깊이마다 들여쓰기 16px, 폴더는 펼침 화살표, 선택된 파일은 `--sel` 면 + 왼쪽 2px `--text` 막대 + 굵기 500. 역할은 `tree` + `treeitem`, 화살표 위아래로 옮기고 좌우로 접고 폅니다.
+- 위 요소 가운데 생각 과정, 스트리밍, 실패한 도구 호출, 대화 안의 알림, 오류 카드, 첨부, 파일 트리는 **시안에는 없고 `ui/gallery.html`에 있습니다.** / 메뉴와 하위 에이전트는 규칙만 있습니다.
 
 ### 5.14 그 밖의 세부
 
@@ -692,10 +730,11 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
 | 창 너비 | 사이드바 | 사이드 패널 | 사이드 패널을 열면 |
 |---|---|---|---|
 | 1241px 이상 | 264px | 468px | 셋 다 보임 |
-| 960 ~ 1240px | 236px | 384px | **사이드바를 숨깁니다.** 패널을 닫으면 돌아옵니다 |
+| 960 ~ 1240px | 236px | 384px | **사이드바를 숨깁니다.** 사이드바 버튼을 누르면 패널을 닫고 사이드바를 보여 줍니다(둘 중 하나만) |
 
 - 최소 창 크기는 960 x 600px입니다(Electron의 `minWidth`, `minHeight`). 앱에 이미 다른 최소 크기가 있으면 그 값을 유지하고 보고에 적습니다.
 - 본문 폭은 어떤 경우에도 480px 아래로 줄지 않습니다.
+- 사이드바가 숨은 동안의 새 채팅 버튼과 승인 대기 표시는 5.6을 따릅니다. 좁은 창에서 번갈아 보여 주는 것은 1장의 동작 변경 9번이므로, 승인 전에는 앱의 기존 방식을 유지합니다.
 - 본문 안쪽 최대 폭: 대화와 입력창 760px, 그 밖의 페이지 920px.
 
 ### 8.2 타이틀바
@@ -783,12 +822,12 @@ Metis 데스크탑 앱의 화면을 만들고 고칠 때 따르는 **단일 기�
 | 분류 | 현재 → 변경 |
 |---|---|
 | 제공업체 연결 | 좌우 분할 상자 → 한 카드의 행으로: 제공업체(상태와 주소, "연결 편집…"), 자격 증명(키 이름, "삭제"), "제공업체 추가…". 추론 강도는 기본 셀렉트 → 드롭다운. "초기화 옵션" 접힘 → "초기화" 그룹의 위험 버튼 |
-| 채팅 | 기본 모드 4개를 선택 카드로. 프로젝트 힌트와 프롬프트 인젝션 감지는 행으로 |
+| 채팅 | 기본 모드 4개를 선택 카드로. **"수동"과 "스마트" 옆의 톱니 버튼은 유지합니다**(선택 카드 오른쪽 끝의 아이콘 버튼, `aria-label`과 툴팁). 프로젝트 힌트와 프롬프트 인젝션 감지는 행으로 |
 | 에이전트 | 체크박스 → 토글. 숫자 입력 뒤에 단위. 항목을 그룹 4개로(에이전트 루프, 컨텍스트 압축, 레시피 재시도, 중지 훅) |
 | 프롬프트 | 노란 경고 상자 → 주의 표시와 한 줄 안내. 파일마다 이름, 설명, "편집…" |
 | 키보드 | 그룹 3개 유지. 행마다 키 조합, "변경…", 토글 |
 | 익스텐션 | 카드 격자 유지. 카드마다 이름, 토글, 설명 |
-| 앱 설정 | 알림, 테마(구간 선택 4개), 언어(드롭다운), 버전(로고와 버전 번호). "메뉴 막대 아이콘"은 Windows 용어인 "시스템 트레이 아이콘"으로 |
+| 앱 설정 | 알림("설정 열기…"), 작업 완료 알림, 시스템 트레이 아이콘, 잠자기 방지, 테마(구간 선택 4개), 언어(드롭다운), 버전(로고와 버전 번호). "메뉴 막대 아이콘"은 Windows 용어인 "시스템 트레이 아이콘"으로 |
 
 - 저장 버튼이 있던 항목(온도 등)의 저장 방식은 그대로 둡니다(7.3).
 - 제공업체 설정 창: 안내 문장, API 키 입력(가림, 5.2), "옵션 2개 표시", 보관 안내. 버튼은 맨 왼쪽에 "제공업체 삭제"(확인 창을 거침), 오른쪽에 "저장"과 "취소".
@@ -909,7 +948,8 @@ Radix 부품을 쓰면 아래 대부분이 기본으로 됩니다. 기본 동작
 - **고대비**(`forced-colors: active`, Windows의 대비 테마): 시스템 색이 강제로 적용되어 면 색으로만 알리던 것이 사라집니다. 아래를 지킵니다.
   - 면 색으로 구분하던 컨트롤(버튼, 입력, 카드, 메뉴, 창)에 `outline: 1px solid transparent`를 둡니다. 고대비에서는 이 외곽선이 시스템 색으로 보입니다.
   - 켜짐·선택됨은 시스템 색으로 다시 정합니다: 켜진 토글·체크 상자·라디오와 선택된 내비게이션 항목·구간 선택 칸은 `Highlight` 면에 `HighlightText`. 이 요소들에는 `forced-color-adjust: none`을 주고 시스템 색 낱말로 값을 적습니다.
-  - 포커스 링은 `Highlight`.
+  - 포커스 링은 `Highlight`. 포커스를 `outline`으로 그렸다면 따로 할 일이 없습니다(4장).
+  - 켜진 아이콘 버튼, 선택된 탭, 선택된 파일도 `Highlight` 면에 `HighlightText`.
   - 상태 표시는 모양으로 구분되므로 색은 `ButtonText` 하나로 둡니다.
 - **색 구성표**(`prefers-color-scheme`): 테마 설정이 "시스템"일 때만 따릅니다.
 - **배율**: Windows의 100%, 125%, 150%에서 선이 흐려지거나 글자가 잘리지 않는지 봅니다. 소수점 px을 쓰지 않는 이유입니다(3.6).
@@ -939,7 +979,7 @@ Radix 부품을 쓰면 아래 대부분이 기본으로 됩니다. 기본 동작
 2. 대응 관계를 `docs/design/TOKEN_MAP.md`에 표로 적습니다(이 문서의 토큰 ↔ 저장소 변수 ↔ Tailwind 클래스). 이후 작업은 이 표를 따릅니다.
 3. Tailwind 버전을 `package.json`에서 확인하고 그 버전의 방식을 씁니다.
 
-기존 체계가 없을 때 쓰는 Tailwind 이름입니다. CSS 변수 이름은 짧지만 Tailwind 이름은 **뜻이 드러나게** 붙였습니다.
+기존 체계가 없을 때 쓰는 Tailwind 이름입니다. CSS 변수 이름은 짧지만 Tailwind 이름은 **뜻이 드러나게**, 그리고 **Tailwind의 기본 이름과 겹치지 않게** 붙였습니다. 겹치면(`rounded-lg`, `font-sans` 등) 아직 고치지 않은 화면의 모습이 함께 바뀝니다.
 
 | 토큰 | Tailwind 이름 | 예 |
 |---|---|---|
@@ -947,9 +987,9 @@ Radix 부품을 쓰면 아래 대부분이 기본으로 됩니다. 기본 동작
 | `--text` / `--text2` / `--mute` | `ink` / `ink-2` / `ink-mute` | `text-ink-mute` |
 | `--line` / `--ctl-line` | `line` / `line-control` | `border-line` |
 | `--fill` / `--fill2` / `--fill3` | `control` / `control-hover` / `control-press` | `bg-control hover:bg-control-hover active:bg-control-press` |
-| `--group` | `inset` | `bg-inset` |
+| `--group` | `well` | `bg-well` |
 | `--sel` / `--hover` | `selected` / `row-hover` | `bg-selected` |
-| `--accent` / `--atext` | `accent` / `accent-ink` | `bg-accent`, `text-accent-ink` |
+| `--accent` / `--atext` / `--on-accent` | `accent` / `accent-ink` / `on-accent` | `bg-accent`, `text-accent-ink` |
 | `--ring` | `focus` | `outline-focus` |
 | `--btn` / `--btn-ink` | `primary` / `primary-ink` | `bg-primary text-primary-ink` |
 | `--ok` / `--warn` / `--danger` / `--dsoft` | `ok` / `warn` / `danger` / `danger-soft` | `text-danger bg-danger-soft` |
@@ -957,19 +997,18 @@ Radix 부품을 쓰면 아래 대부분이 기본으로 됩니다. 기본 동작
 | `--tip` / `--tip-ink` / `--scrim` | `tip` / `tip-ink` / `scrim` | `bg-tip text-tip-ink` |
 | `--add-bg` `--add-tx` `--del-bg` `--del-tx` | `diff-add` `diff-add-ink` `diff-del` `diff-del-ink` | `bg-diff-add text-diff-add-ink` |
 | 글자 크기 8단계 | `caption` `small` `body` `heading` `subtitle` `title` `display` `clock` | `text-body` |
-| 모서리 | `xs` `sm` `md` `bubble` `lg` `full` | `rounded-md` |
+| 모서리 5 / 8 / 12 / 16 / 20 / 999px | `tick` `field` `card` `bubble` `dialog` `pill` | `rounded-card` |
+| 글꼴 | `app` `code` `brand` | `font-code` |
 | 높이 | `control` `control-sm` `icon-btn` `nav` `row` `titlebar` | `h-control` |
 | 그림자 | `pop` `modal` | `shadow-pop` |
 
-**Tailwind 4** (CSS에서 설정). 아래는 Tailwind 공식 문서의 테마 변수 이름 규칙(`--color-*`, `--text-*`, `--radius-*`, `--spacing-*`, `--shadow-*`, `--font-*`, `--ease-*`)과 `@theme inline`을 따랐습니다. 층(z-index)과 지속 시간에는 테마 이름 규칙이 없어서 `z-[var(--z-menu)]`, `duration-[var(--dur-state)]`처럼 변수를 직접 가리킵니다.
+**Tailwind 4** (CSS에서 설정). Tailwind 공식 문서의 테마 변수 이름 규칙(`--color-*`, `--text-*`, `--radius-*`, `--spacing-*`, `--shadow-*`, `--font-*`, `--ease-*`)과 `@theme inline`을 따랐습니다. 층(z-index)과 지속 시간에는 테마 이름 규칙이 없어서 `z-[var(--z-menu)]`, `duration-[var(--dur-state)]`처럼 변수를 직접 가리킵니다.
 
 ```css
 @import "tailwindcss";
 @import "./metis-tokens.css";
 
 @theme inline {
-  /* 기본 색을 지운다. bg-blue-500 같은 클래스가 아예 만들어지지 않는다 */
-  --color-*: initial;
   --color-surface: var(--bg);
   --color-surface-side: var(--side);
   --color-surface-raised: var(--panel);
@@ -981,11 +1020,12 @@ Radix 부품을 쓰면 아래 대부분이 기본으로 됩니다. 기본 동작
   --color-control: var(--fill);
   --color-control-hover: var(--fill2);
   --color-control-press: var(--fill3);
-  --color-inset: var(--group);
+  --color-well: var(--group);
   --color-selected: var(--sel);
   --color-row-hover: var(--hover);
   --color-accent: var(--accent);
   --color-accent-ink: var(--atext);
+  --color-on-accent: var(--on-accent);
   --color-focus: var(--ring);
   --color-primary: var(--btn);
   --color-primary-ink: var(--btn-ink);
@@ -1005,8 +1045,6 @@ Radix 부품을 쓰면 아래 대부분이 기본으로 됩니다. 기본 동작
   --color-diff-del-ink: var(--del-tx);
   --color-close-hover: var(--close-hover);
 
-  /* 글자 크기: 기본 이름(text-sm 등)을 지우고 눈금 이름만 남긴다 */
-  --text-*: initial;
   --text-caption: 11px;   --text-caption--line-height: 14px;
   --text-small: 12px;     --text-small--line-height: 16px;
   --text-body: 13px;      --text-body--line-height: 1.5;
@@ -1016,17 +1054,16 @@ Radix 부품을 쓰면 아래 대부분이 기본으로 됩니다. 기본 동작
   --text-display: 26px;   --text-display--line-height: 32px;
   --text-clock: 48px;     --text-clock--line-height: 52px;
 
-  --font-sans: var(--font-ui);
-  --font-mono: var(--font-mono);
-  --font-wordmark: var(--font-wordmark);
+  --font-app: var(--font-ui);
+  --font-code: var(--font-mono);
+  --font-brand: var(--font-wordmark);
 
-  --radius-*: initial;
-  --radius-xs: var(--r-xs);
-  --radius-sm: var(--r-sm);
-  --radius-md: var(--r-md);
+  --radius-tick: var(--r-xs);
+  --radius-field: var(--r-sm);
+  --radius-card: var(--r-md);
   --radius-bubble: var(--r-bubble);
-  --radius-lg: var(--r-lg);
-  --radius-full: var(--r-full);
+  --radius-dialog: var(--r-lg);
+  --radius-pill: var(--r-full);
 
   --spacing-control: var(--h-control);
   --spacing-control-sm: var(--h-control-sm);
@@ -1035,7 +1072,6 @@ Radix 부품을 쓰면 아래 대부분이 기본으로 됩니다. 기본 동작
   --spacing-row: var(--h-row);
   --spacing-titlebar: var(--h-titlebar);
 
-  --shadow-*: initial;
   --shadow-pop: var(--pop);
   --shadow-modal: var(--shadow);
 
@@ -1043,52 +1079,51 @@ Radix 부품을 쓰면 아래 대부분이 기본으로 됩니다. 기본 동작
 }
 ```
 
-- `--color-*: initial`로 기본 색을 지운 뒤에도 `transparent`, `current` 같은 값이 남는지는 저장소의 Tailwind 버전에서 확인합니다. 남지 않으면 `--color-transparent: transparent; --color-current: currentColor;`를 더합니다.
-- 기본 색을 지우면 아직 고치지 않은 화면의 `bg-gray-100` 같은 클래스가 사라집니다. **화면을 모두 옮긴 뒤 마지막 단계에서 지웁니다.** 그 전에는 `--color-*: initial` 줄을 빼고 자동 검사의 `tw-palette` 규칙으로 막습니다.
-- Tailwind의 간격 단위는 기본 0.25rem(4px)이어서 `p-1`=4px, `p-2`=8px, `gap-1.5`=6px, `p-3.5`=14px처럼 3.6의 눈금과 맞습니다. 눈금에 없는 값(`p-[13px]`)을 쓰지 않습니다.
+- 위 이름은 Tailwind의 기본 이름과 겹치지 않아서, 넣는 것만으로는 기존 화면이 달라지지 않습니다. 달라지는 것은 기존 변수의 **값**을 토큰에 맞춘 만큼입니다.
+- **모든 화면을 옮긴 뒤 마지막 단계에서** 기본 값을 지웁니다. `@theme` 안에 `--color-*: initial; --text-*: initial; --radius-*: initial; --shadow-*: initial;`을 맨 위에 넣으면 `bg-blue-500`, `text-sm`, `rounded-lg`, `shadow-lg` 같은 클래스가 아예 만들어지지 않습니다. 지운 뒤에 `transparent`, `current` 같은 값이 남는지는 저장소의 Tailwind 버전에서 확인하고, 없으면 `--color-transparent: transparent; --color-current: currentColor;`를 더합니다.
+- Tailwind의 간격 단위는 기본 0.25rem(4px)이어서 `p-1`=4px, `p-2`=8px, `gap-1.5`=6px, `p-3.5`=14px처럼 3.6의 눈금과 맞습니다. 눈금에 없는 값(`p-9`, `p-[13px]`)을 쓰지 않습니다.
 
-**Tailwind 3** (`tailwind.config`에서 설정):
+**Tailwind 3** (`tailwind.config`에서 설정). 모두 `extend` 안에 넣습니다.
 
 ```ts
 export default {
   theme: {
-    // extend가 아니라 theme에 직접 넣어 기본 값을 대체한다(색·글자 크기·모서리·그림자)
-    colors: {
-      transparent: 'transparent', current: 'currentColor',
-      surface: { DEFAULT: 'var(--bg)', side: 'var(--side)', raised: 'var(--panel)' },
-      ink: { DEFAULT: 'var(--text)', 2: 'var(--text2)', mute: 'var(--mute)' },
-      line: { DEFAULT: 'var(--line)', control: 'var(--ctl-line)' },
-      control: { DEFAULT: 'var(--fill)', hover: 'var(--fill2)', press: 'var(--fill3)' },
-      inset: 'var(--group)', selected: 'var(--sel)', 'row-hover': 'var(--hover)',
-      accent: { DEFAULT: 'var(--accent)', ink: 'var(--atext)' },
-      focus: 'var(--ring)',
-      primary: { DEFAULT: 'var(--btn)', ink: 'var(--btn-ink)' },
-      ok: 'var(--ok)', warn: 'var(--warn)',
-      danger: { DEFAULT: 'var(--danger)', soft: 'var(--dsoft)' },
-      bubble: 'var(--bubble)', code: 'var(--code)', 'seg-selected': 'var(--segsel)',
-      tip: { DEFAULT: 'var(--tip)', ink: 'var(--tip-ink)' }, scrim: 'var(--scrim)',
-      diff: { add: 'var(--add-bg)', 'add-ink': 'var(--add-tx)', del: 'var(--del-bg)', 'del-ink': 'var(--del-tx)' },
-      'close-hover': 'var(--close-hover)',
-    },
-    fontSize: {
-      caption: ['11px', '14px'], small: ['12px', '16px'], body: ['13px', '1.5'], heading: ['15px', '20px'],
-      subtitle: ['17px', '22px'], title: ['22px', '26px'], display: ['26px', '32px'], clock: ['48px', '52px'],
-    },
-    borderRadius: { none: '0', xs: 'var(--r-xs)', sm: 'var(--r-sm)', md: 'var(--r-md)', bubble: 'var(--r-bubble)', lg: 'var(--r-lg)', full: 'var(--r-full)' },
-    boxShadow: { none: 'none', pop: 'var(--pop)', modal: 'var(--shadow)' },
     extend: {
-      fontFamily: { sans: 'var(--font-ui)', mono: 'var(--font-mono)', wordmark: 'var(--font-wordmark)' },
+      colors: {
+        surface: { DEFAULT: 'var(--bg)', side: 'var(--side)', raised: 'var(--panel)' },
+        ink: { DEFAULT: 'var(--text)', 2: 'var(--text2)', mute: 'var(--mute)' },
+        line: { DEFAULT: 'var(--line)', control: 'var(--ctl-line)' },
+        control: { DEFAULT: 'var(--fill)', hover: 'var(--fill2)', press: 'var(--fill3)' },
+        well: 'var(--group)', selected: 'var(--sel)', 'row-hover': 'var(--hover)',
+        accent: { DEFAULT: 'var(--accent)', ink: 'var(--atext)' }, 'on-accent': 'var(--on-accent)',
+        focus: 'var(--ring)',
+        primary: { DEFAULT: 'var(--btn)', ink: 'var(--btn-ink)' },
+        ok: 'var(--ok)', warn: 'var(--warn)',
+        danger: { DEFAULT: 'var(--danger)', soft: 'var(--dsoft)' },
+        bubble: 'var(--bubble)', code: 'var(--code)', 'seg-selected': 'var(--segsel)',
+        tip: { DEFAULT: 'var(--tip)', ink: 'var(--tip-ink)' }, scrim: 'var(--scrim)',
+        diff: { add: 'var(--add-bg)', 'add-ink': 'var(--add-tx)', del: 'var(--del-bg)', 'del-ink': 'var(--del-tx)' },
+        'close-hover': 'var(--close-hover)',
+      },
+      fontSize: {
+        caption: ['11px', '14px'], small: ['12px', '16px'], body: ['13px', '1.5'], heading: ['15px', '20px'],
+        subtitle: ['17px', '22px'], title: ['22px', '26px'], display: ['26px', '32px'], clock: ['48px', '52px'],
+      },
+      fontFamily: { app: 'var(--font-ui)', code: 'var(--font-mono)', brand: 'var(--font-wordmark)' },
+      borderRadius: { tick: 'var(--r-xs)', field: 'var(--r-sm)', card: 'var(--r-md)', bubble: 'var(--r-bubble)', dialog: 'var(--r-lg)', pill: 'var(--r-full)' },
+      boxShadow: { pop: 'var(--pop)', modal: 'var(--shadow)' },
       height: { control: 'var(--h-control)', 'control-sm': 'var(--h-control-sm)', 'icon-btn': 'var(--h-icon-btn)', nav: 'var(--h-nav)', row: 'var(--h-row)', titlebar: 'var(--h-titlebar)' },
       zIndex: { raised: 'var(--z-raised)', titlebar: 'var(--z-titlebar)', 'modal-scrim': 'var(--z-modal-scrim)', modal: 'var(--z-modal)', menu: 'var(--z-menu)', tooltip: 'var(--z-tooltip)', toast: 'var(--z-toast)' },
-      transitionDuration: { fast: 'var(--dur-fast)', DEFAULT: 'var(--dur)', state: 'var(--dur-state)', modal: 'var(--dur-modal)' },
+      transitionDuration: { fast: 'var(--dur-fast)', state: 'var(--dur-state)', modal: 'var(--dur-modal)' },
       transitionTimingFunction: { standard: 'var(--ease)' },
     },
   },
 };
 ```
 
-- 색·글자 크기·모서리·그림자를 `theme`에 직접 넣으면 Tailwind 기본 값이 사라집니다. 위와 같은 이유로 **화면을 모두 옮긴 뒤 마지막에** 이렇게 바꾸고, 그 전에는 `extend` 안에 둡니다.
+- 마지막 단계에서 `colors`, `fontSize`, `borderRadius`, `boxShadow`를 `extend` 밖(`theme` 바로 아래)으로 옮기면 Tailwind 기본 값이 사라집니다. 이때 `colors`에 `transparent: 'transparent', current: 'currentColor'`를, `borderRadius`와 `boxShadow`에 `none`을 더합니다.
 - 반투명 토큰에는 불투명도 수식(`bg-control/50`)을 쓰지 않습니다. CSS 변수로 준 색에는 Tailwind 3의 불투명도 수식이 듣지 않습니다.
+- 위 두 설정 예시는 빈 프로젝트에서 Tailwind 4.3.5와 3.4.19로 빌드해, 클래스가 만들어지고 기본 이름(`rounded-lg`, `text-sm`, `bg-blue-500`)이 그대로 남는 것을 확인했습니다. 실제 앱의 설정과 합친 것은 아니므로 0단계에서 저장소의 버전으로 다시 빌드합니다.
 
 ### 11.3 Radix 상태와 4장의 대응
 
@@ -1099,6 +1134,7 @@ Radix 부품은 상태를 속성으로 내보냅니다. 클래스를 조건으�
 | 켜짐(토글, 체크 상자, 라디오) | `data-state="checked"` | `data-[state=checked]:bg-accent` |
 | 선택됨(구간 선택, 탭) | `data-state="on"` / `"active"` | `data-[state=on]:bg-seg-selected` |
 | 열림(메뉴가 붙은 버튼, 접이식) | `data-state="open"` | `data-[state=open]:bg-control-hover` |
+| 눌려 켜진 버튼(패널 버튼) | `data-state="on"` 또는 `aria-pressed="true"` | `aria-pressed:bg-control-press aria-pressed:ring-1 aria-pressed:ring-line-control aria-pressed:ring-inset` |
 | 메뉴 항목 올림·키보드 이동 | `data-highlighted` | `data-[highlighted]:bg-control-hover` |
 | 쓸 수 없음 | `data-disabled` | `data-[disabled]:opacity-[0.42]` |
 | 키보드 포커스 | `:focus-visible` | `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus` |
@@ -1123,12 +1159,28 @@ Radix 부품은 상태를 속성으로 내보냅니다. 클래스를 조건으�
 메뉴, 팝오버, 창, 툴팁을 Portal로 `body`에 붙이면 3.7의 층 순서만으로 충분합니다.
 저장소에 Portal 없이 그 자리에 그리는 메뉴가 남아 있다면, 그 메뉴를 품은 요소에 `transform`, `filter`, 1 미만의 `opacity`를 주면 메뉴가 다른 것 아래로 내려갑니다. 그런 메뉴는 Portal을 쓰도록 고칩니다. 조상 요소의 스타일을 피해 가는 방식으로 풀지 않습니다.
 
+### 11.6 참조 구현 `ui/`
+
+| 파일 | 내용 |
+|---|---|
+| `ui/metis-tokens.css` | 토큰 값(라이트, 다크) |
+| `ui/metis-components.css` | 4~5장의 컴포넌트를 `mt-` 클래스로 옮긴 CSS. 값은 모두 토큰. 고대비와 움직임 줄이기 포함 |
+| `ui/gallery.html` | 위 CSS로 그린 견본. 브라우저로 열어 눌러 봅니다. 마크업을 복사해 쓸 수 있습니다 |
+| `ui/README.md` | 리액트와 Radix에 붙이는 예 |
+
+쓰는 방법은 둘 중 하나입니다. 0단계에서 저장소의 방식에 맞춰 고르고 `PLAN.md`에 적습니다.
+
+- **A. CSS를 그대로 쓴다.** 두 파일을 불러오고, 기존 컴포넌트(Radix 부품 포함)에 `mt-` 클래스를 붙입니다. 상태는 `aria-*`와 Radix의 `data-state`를 CSS가 직접 읽으므로 조건부 클래스가 필요 없습니다. 가장 빠르고, 견본과 같은 모습이 바로 나옵니다.
+- **B. Tailwind 클래스로 옮긴다.** 11.2의 이름으로 컴포넌트마다 클래스를 다시 씁니다. `ui/metis-components.css`의 그 컴포넌트 규칙을 값의 기준으로 삼습니다. 저장소가 Tailwind만 쓰기로 정해져 있을 때 고릅니다.
+
+한 컴포넌트 안에서 A와 B를 섞지 않습니다. 저장소 전체로는 섞여 있어도 됩니다(공용 컴포넌트는 A, 화면 배치는 Tailwind).
+
 ## 12. 검사
 
 ### 12.1 자동 검사
 
 ```bash
-node scripts/design-check.mjs <UI 소스 폴더> --tokens <토큰 파일>
+node scripts/design-check.mjs <UI 소스 폴더> --tokens docs/design/ui/metis-tokens.css
 node --test scripts/design-check.test.mjs      # 검사 스크립트 자체의 검사
 ```
 
@@ -1138,19 +1190,20 @@ node --test scripts/design-check.test.mjs      # 검사 스크립트 자체의 �
 | `tw-palette` | Tailwind 기본 색(`bg-blue-500`, `!text-gray-400`, `border-t-red-500`) | 오류 |
 | `tw-text-size` | Tailwind 기본 크기 이름(`text-sm`) | 오류 |
 | `font-size`, `font-weight` | 눈금 밖의 글자 크기, 400~700 밖의 굵기 | 오류 |
-| `tw-arbitrary`, `tw-shadow` | 임의 모서리·층·그림자(`rounded-[7px]`, `z-[999]`), 기본 그림자(`shadow-lg`) | 오류 |
+| `tw-arbitrary`, `tw-shadow` | 임의 모서리·층·그림자(`rounded-[7px]`, `z-[999]`, `z-999`), 기본 그림자(`shadow-lg`) | 오류 |
 | `gradient`, `backdrop-blur` | 그라데이션, 반투명 유리 효과 | 오류 |
 | `native-select`, `native-dialog` | `<select>`, `alert()`·`confirm()`·`prompt()` | 오류 |
 | `unknown-token` | 토큰 파일에 없는 `var(--이름)` (`--tokens`를 줬을 때) | 오류 |
 | `ignore-without-reason` | 이유 없는 예외 표시 | 오류 |
-| `tw-black-white`, `tw-spacing`, `tw-height` | `text-white`, 눈금 밖 간격·높이 | 알림 |
+| `tw-black-white`, `tw-spacing`, `tw-height`, `tw-opacity` | `text-white`, 눈금 밖 간격·높이(`p-9`, `p-[13px]`), 반투명 토큰의 불투명도 수식 | 알림 |
 | `click-on-div`, `icon-button-label`, `native-title` | `div`의 `onClick`, 이름 없는 아이콘 버튼, `title` 속성 | 알림 |
 | `outline-none`, `motion` | 포커스 표시 제거, 꾸미는 움직임 | 알림 |
 
 - 색상 값을 쓸 수 있는 파일은 `--tokens`와 `--token-file`로 **경로를 정확히** 지정한 파일, 그리고 이름이 `metis-tokens.css`, `tailwind.config.*`인 파일뿐입니다.
 - 꼭 필요한 예외는 그 줄에 `design-check-ignore: 이유`를 적습니다. 이유가 없으면 오류입니다.
-- **기존 코드에 위반이 많을 때**: 처음 한 번 `--baseline scripts/design-baseline.json --update-baseline`으로 현재 상태를 기록하고, 이후에는 `--baseline scripts/design-baseline.json`으로 돌립니다. 기록보다 **늘어난** 위반만 실패합니다. 화면을 고칠 때마다 기준선을 다시 기록해 줄입니다. 위반이 늘어난 상태로는 다시 기록되지 않습니다.
-- `package.json`의 `scripts`에 `"design:check"`로 넣고, 린트와 함께 돌립니다.
+- **기존 코드에 위반이 많을 때**: 처음 한 번 `--baseline scripts/design-baseline.json --update-baseline`으로 현재 상태를 기록하고, 이후에는 `--baseline scripts/design-baseline.json`으로 돌립니다. 기록보다 **늘어난** 위반만 실패합니다. 화면을 고칠 때마다 기준선을 다시 기록해 줄입니다. 어느 한 항목이라도 위반이 늘어난 상태로는 다시 기록되지 않습니다. 예외 처리(`design-check-ignore`)한 건수는 결과 맨 아래에 나옵니다.
+- `package.json`의 `scripts`에 `"design:check"`로 넣고, 린트와 함께 돌립니다. 저장소에 CI가 있으면 CI에도 넣습니다.
+- **토큰을 추가하거나 5장에 컴포넌트를 등록한 PR**은 본문 맨 위에 그 사실을 적어 사람이 따로 보게 합니다. 토큰 파일, 이 문서의 3장 표, `ui/metis-components.css`를 함께 고칩니다.
 
 **이 검사가 못 잡는 것.** 통과했다고 규칙을 지킨 것은 아닙니다.
 - 상태가 빠진 것(올림, 누름, 포커스), 대비, 키보드 동작과 포커스 이동
@@ -1189,13 +1242,16 @@ node --test scripts/design-check.test.mjs      # 검사 스크립트 자체의 �
 
 | 항목 | 확인 전까지 |
 |---|---|
-| 채팅 진행 화면의 실제 구성(8.6) | 기존 구성 유지, 5.13의 스타일만 |
+| 채팅 진행 화면의 실제 구성(8.6). 받은 화면에 대화가 진행 중인 화면이 없었습니다 | 기존 구성 유지, 5.13의 스타일만. 5.13에 없는 요소는 6.6에 따라 묻습니다 |
+| 설정 > 채팅의 "수동", "스마트" 옆 톱니 버튼이 무엇을 여는지(8.12) | 버튼과 동작을 그대로 유지 |
+| 1장의 동작 변경 목록 10개 | 기존 동작 유지. 0단계에서 현재 동작을 적어 승인을 받습니다 |
 | 레시피와 일정이 있을 때의 실제 목록 모습(8.8, 8.10) | 기존 구성 유지, 5.5의 스타일만 |
 | 채팅 기록 카드의 기존 동작 7개가 무엇인지(8.11) | 코드에서 확인해 모두 ⋯ 메뉴로 |
 | 회사 로고를 HCT 2.0으로 유지할지 | 유지 |
 | 지금 앱에 없던 요소를 넣을지: 답변 아래 복사·다시 실행, 입력창 단축키 안내, 사이드바 단축키 힌트, 오른쪽 클릭 메뉴, F2·Delete·F6 | **넣지 않습니다.** 승인이 나면 넣습니다 |
 | 창 컨트롤을 `titleBarOverlay`로 바꿀지(10.5) | 기존 방식 유지 |
 | Aura에서 새 토큰의 대비(3.1) | 라이트 값을 물려받고, 못 넘는 토큰을 보고 |
+| Tailwind 설정 예시(11.2)가 저장소의 버전에서 빌드되는지 | 0단계에서 빌드해 확인 |
 | 로고 원본(SVG, ICO)의 위치 | 저장소에 있는 것을 사용 |
 | 이 저장소의 라이선스와 로고 이미지의 공개 범위 | 정해지지 않음. 저장소 관리자가 정합니다 |
 
@@ -1219,3 +1275,15 @@ node --test scripts/design-check.test.mjs      # 검사 스크립트 자체의 �
 | | Aura 값을 이 문서에서 뺌. 저장 시점, 번역 구조, 900px 이하 배치를 범위 밖으로 명시 | 지시가 서로 달랐음 |
 | | Tailwind 이름을 뜻이 드러나게 바꾸고(`fill` → `control` 등), 색 외의 토큰도 연결 | 이름이 헷갈렸고 크기·모서리·층이 연결되지 않았음 |
 | | 자동 검사 다시 작성(12.1) | 기준선이 빈 채로 기록됐고, 흔한 위반을 놓치거나 잘못 잡았음 |
+| 2026-11-20 | **3차.** 2차 재검토의 지적을 반영 | 아래 |
+| | 포커스 표시를 모두 `outline`으로. 입력 칸은 올려도 면을 진하게 하지 않음 | 고대비에서 입력 칸의 포커스가 사라졌고, 올린 입력의 자리 표시 글자가 4.2:1이었음 |
+| | 켜진 아이콘 버튼과 선택된 파일에 경계선·막대 추가. 스크롤바와 단축키 표시를 진하게 | 면 색만으로 알렸음(1.4:1, 1.1:1) |
+| | "이 채팅에서 항상 허용"의 범위, 표시, 해제 방법을 정함 | 무엇을 허용하는지와 되돌리는 방법이 없었음 |
+| | 창이 떠 있는 동안 타이틀바의 앱 버튼은 눌리지 않음 | 창 뒤의 상태가 바뀌었음 |
+| | 좁은 창에서 사이드바가 숨었을 때의 새 채팅, 승인 대기 표시, 되돌아가는 방법 | 정해지지 않았음 |
+| | Tailwind 이름을 기본 이름과 겹치지 않게(`rounded-card`, `font-app`, `bg-well`). 글꼴 변수의 자기 참조 수정 | `rounded-lg` 등이 기존 화면의 모습을 바꿨음 |
+| | 모습과 동작의 경계를 1장에 표로. 동작 변경 10개는 승인 뒤에만 | 지시서의 "기능을 바꾸지 않는다"와 부딪쳤음 |
+| | 글자 크기 설정 규칙 삭제 | 받은 화면에 없는 설정을 근거 없이 적었음 |
+| | 대화 요소 추가: 생각 과정, 스트리밍, 실패한 도구 호출, 하위 에이전트, 대화 안의 알림 | 채팅 화면의 규칙이 비어 있었음 |
+| | 설정 > 채팅의 톱니 버튼, 앱 설정의 잠자기 방지를 8.12에 적음 | 받은 화면에 있는데 빠뜨렸음 |
+| | `ui/` 추가: 컴포넌트 CSS 참조 구현과 견본. 토큰 파일을 `ui/`로 옮김. `--on-accent` 토큰 추가 | 개발자가 시안의 겹친 CSS 대신 바로 쓸 수 있는 것이 필요했음 |

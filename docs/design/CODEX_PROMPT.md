@@ -4,25 +4,27 @@ Codex(또는 다른 코딩 에이전트)에게 그대로 전달하는 지시서�
 
 ## 목표
 
-Metis 데스크탑 앱(React, TypeScript, Tailwind CSS, Radix UI, Vite, Electron, Windows 배포)의 화면을 `docs/design/DESIGN.md`의 규칙으로 바꿉니다. 기능은 바꾸지 않습니다.
+이미 만들어진 Metis 데스크탑 앱(React, TypeScript, Tailwind CSS, Radix UI, Vite, Electron, Windows 배포)의 화면을 `docs/design/DESIGN.md`의 규칙으로 바꿉니다. **모습과 접근성은 바꾸고, 동작은 바꾸지 않습니다.** 둘의 경계는 `DESIGN.md` 1장의 표가 정합니다.
 
 ## 먼저 읽을 것 (이 순서)
 
 1. `docs/design/DESIGN.md` 0~2장(읽는 법, 범위, 원칙), 그리고 13장(남은 일)
-2. `docs/design/metis-tokens.css`
+2. `docs/design/ui/metis-tokens.css`, `docs/design/ui/README.md`. `docs/design/ui/gallery.html`을 브라우저로 열어 컴포넌트를 눌러 봅니다
 3. 그 단계에서 다루는 `DESIGN.md`의 장(아래 표)
-4. `docs/design/metis-final-prototype.html`을 브라우저로 열어 모습을 확인(참고용)
+4. `docs/design/metis-final-prototype.html`을 브라우저로 열어 화면 전체의 모습을 확인(참고용)
 
 ## 기준
 
 - **완료 기준은 `DESIGN.md`와 그 12장의 검사입니다.** 시안과 똑같아 보이는지가 아닙니다.
 - 시안은 그림입니다. 문서와 다르면 문서를 따르고, 차이를 PR 본문에 적습니다. 시안의 CSS 값을 옮기지 않습니다.
+- 컴포넌트의 값은 `ui/metis-components.css`에서 봅니다. `DESIGN.md` 4~5장을 옮긴 참조 구현입니다.
 - "현재 화면" 설명(`DESIGN.md` 8장)과 실제 코드가 다르면 코드가 맞습니다. 차이를 적습니다.
 
 ## 하지 않는 것
 
-- 기능, 동작, 데이터·설정의 저장 방식과 **저장 시점**, 백엔드 통신을 바꾸지 않습니다.
-- **Aura 테마의 색 값**을 바꾸지 않습니다. 라이트와 다크만 `metis-tokens.css`에 맞춥니다.
+- 기능, 데이터·설정의 저장 방식과 **저장 시점**, 백엔드 통신을 바꾸지 않습니다.
+- **`DESIGN.md` 1장의 "동작 변경 목록" 10개는 승인 없이 적용하지 않습니다.** 그 항목의 모습(생김새, 자리, 색)만 적용하고 동작은 앱의 기존 것을 둡니다. 포커스 이동, 키보드 조작, 역할과 이름 같은 접근성 보완은 동작 변경이 아니므로 적용합니다.
+- **Aura 테마의 색 값**을 바꾸지 않습니다. 라이트와 다크만 `ui/metis-tokens.css`에 맞춥니다.
 - 의존성을 추가하지 않습니다. 번역 구조(i18n)를 새로 만들지 않습니다.
 - 창 너비 960px 미만용 배치를 만들지 않습니다.
 - `DESIGN.md` 13.2에 "넣지 않습니다"라고 적힌 새 요소를 넣지 않습니다.
@@ -33,7 +35,8 @@ Metis 데스크탑 앱(React, TypeScript, Tailwind CSS, Radix UI, Vite, Electron
 
 | 사안 | 결정 |
 |---|---|
-| "항상 허용"의 범위 | 그 채팅에만 적용. 설정의 기본 모드는 바꾸지 않음 |
+| "항상 허용"의 범위 | 앱의 기존 범위를 유지하고 버튼 이름을 그 범위에 맞춤. 기존 기능이 없으면 넣지 않음 |
+| 컴포넌트 스타일을 넣는 방식 | 0단계에서 A(`ui/`의 CSS를 그대로)와 B(Tailwind로 옮김) 중 저장소에 맞는 쪽을 골라 PLAN.md에 적음. 판단이 서지 않으면 A |
 | 설정 저장 시점 | 앱의 기존 동작 유지 |
 | Aura 테마 | 기존 색 값 유지. 새 토큰은 라이트 값을 물려받음 |
 | 최소 창 크기 | 960 x 600px. 앱에 이미 다른 값이 있으면 그 값 유지 |
@@ -49,7 +52,7 @@ Metis 데스크탑 앱(React, TypeScript, Tailwind CSS, Radix UI, Vite, Electron
 |---|---|---|---|
 | 0 | **조사만.** 코드를 바꾸지 않음 | 11 | `docs/design/TOKEN_MAP.md`, `docs/design/PLAN.md` |
 | 1 | 토큰과 검사 | 3, 11.2, 12.1 | 토큰 값, Tailwind 연결, 검사 스크립트 등록, 기준선 |
-| 2 | 공용 컴포넌트 | 4, 5.1~5.11, 10 | 버튼, 입력, 선택 컨트롤, 메뉴, 창, 토스트, 툴팁, 상태 표시 |
+| 2 | 공용 컴포넌트 | 4, 5.1~5.11, 10, 11.6 | 버튼, 입력, 선택 컨트롤, 메뉴, 창, 토스트, 툴팁, 상태 표시 |
 | 3 | 뼈대 | 8.1~8.3, 5.6, 10.5 | 타이틀바, 사이드바, 레이아웃 |
 | 4a | 홈과 입력창 | 8.4, 8.5, 5.12 | |
 | 4b | 채팅 화면 | 8.6, 8.13, 5.13 | |
@@ -57,6 +60,7 @@ Metis 데스크탑 앱(React, TypeScript, Tailwind CSS, Radix UI, Vite, Electron
 | 4d | 채팅 기록 | 8.11, 7.2 | |
 | 4e | 설정과 창 | 8.12, 7.3, 7.4 | |
 | 5 | 마무리 | 12 | 기준선 0, Tailwind 기본 값 제거(11.2), 전체 점검 |
+| 별도 | 승인된 동작 변경 | 1장의 목록 | 항목마다 PR 하나. 승인된 것만 |
 
 ### 0단계: 조사 (여기서 반드시 멈춤)
 
@@ -70,6 +74,11 @@ Metis 데스크탑 앱(React, TypeScript, Tailwind CSS, Radix UI, Vite, Electron
 - UI 소스 폴더와, `design-check.mjs`를 돌린 현재 위반 수(규칙별)
 - `DESIGN.md` 8장의 "현재" 설명과 실제 코드가 다른 곳
 - `DESIGN.md` 13.2의 각 항목에 대해 코드에서 알아낸 것
+- **`DESIGN.md` 1장의 동작 변경 목록 10개 각각에 대해 앱이 지금 어떻게 동작하는지.** 문서가 권하는 동작과 같은지, 다르면 무엇이 다른지
+- 채팅 화면에 실제로 있는 요소의 목록과, 그중 `DESIGN.md` 5.13에 규칙이 없는 것
+- `DESIGN.md` 11.2의 Tailwind 설정 예시를 저장소의 버전에서 빌드한 결과
+- 컴포넌트 스타일을 넣는 방식 A/B 중 고른 것과 이유(11.6)
+- CI가 있는지, 있다면 검사를 어디에 넣을지
 - 문서로 설명할 수 없는 기존 요소, 문서의 규칙끼리 맞지 않는 곳
 
 `docs/design/TOKEN_MAP.md`에는 `DESIGN.md`의 토큰 ↔ 저장소의 기존 변수 ↔ 쓸 Tailwind 클래스를 표로 적습니다.
@@ -78,9 +87,10 @@ Metis 데스크탑 앱(React, TypeScript, Tailwind CSS, Radix UI, Vite, Electron
 
 ### 1단계: 토큰과 검사
 
-- 라이트와 다크의 변수 값을 `metis-tokens.css`에 맞춥니다. 기존 변수 체계가 있으면 그 변수의 값을 바꾸고, 없는 토큰만 더합니다.
-- `DESIGN.md` 11.2대로 Tailwind에 연결합니다. **기본 색과 크기 이름은 아직 지우지 않습니다**(5단계에서 지움).
-- `scripts/design-check.mjs`, `scripts/design-check.test.mjs`를 넣고 `package.json`에 `"design:check"`를 더합니다.
+- 라이트와 다크의 변수 값을 `ui/metis-tokens.css`에 맞춥니다. 기존 변수 체계가 있으면 그 변수의 값을 바꾸고, 없는 토큰만 더합니다.
+- `DESIGN.md` 11.2대로 Tailwind에 연결합니다. 이름이 Tailwind 기본 이름과 겹치지 않으므로 기존 화면은 그대로입니다. **기본 색과 크기 이름은 아직 지우지 않습니다**(5단계에서 지움).
+- 방식 A를 골랐으면 `ui/metis-components.css`를 넣습니다. 클래스를 붙이기 전이므로 화면은 달라지지 않습니다.
+- `scripts/design-check.mjs`, `scripts/design-check.test.mjs`를 넣고 `package.json`에 `"design:check"`를 더합니다. CI가 있으면 CI에도 넣습니다.
 - 기준선을 기록합니다: `node scripts/design-check.mjs <UI 폴더> --tokens <토큰 파일> --baseline scripts/design-baseline.json --update-baseline`
 - 이 단계에서 화면이 달라지는 것은 색 값이 바뀐 만큼뿐입니다. 컴포넌트 구조는 건드리지 않습니다.
 
@@ -88,7 +98,7 @@ Metis 데스크탑 앱(React, TypeScript, Tailwind CSS, Radix UI, Vite, Electron
 
 - 그 단계의 화면이나 컴포넌트만 고칩니다.
 - 고친 파일의 위반은 0으로 만들고 기준선을 낮춰 다시 기록합니다.
-- 새 컴포넌트가 필요하면 `DESIGN.md` 6장을 따르고 5장에 등록합니다.
+- 새 컴포넌트가 필요하면 `DESIGN.md` 6장을 따르고 5장에 등록합니다. 토큰을 추가하거나 컴포넌트를 등록한 PR은 본문 맨 위에 그 사실을 적습니다.
 
 ## PR마다 돌리는 검사와 보고
 
@@ -125,7 +135,7 @@ PR 본문은 아래 양식으로 씁니다. 하지 않은 것을 했다고 적�
 ## 멈추고 묻는 경우
 
 - 0단계가 끝났을 때, 그리고 각 단계의 PR을 만들었을 때
-- 기능이나 저장 방식, 저장 시점이 바뀌어야만 규칙을 지킬 수 있을 때
+- 기능이나 저장 방식, 저장 시점, 기존 동작이 바뀌어야만 규칙을 지킬 수 있을 때
 - 의존성을 추가해야 할 때
 - `DESIGN.md`의 두 규칙이 서로 맞지 않거나, 기존 화면의 요소를 문서로 설명할 수 없을 때
 - 검사가 실패하는데 규칙을 어기지 않고는 고칠 수 없을 때

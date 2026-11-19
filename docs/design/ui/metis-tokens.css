@@ -1,4 +1,4 @@
-/* Metis 디자인 토큰. 기준일 2026-11-19 (2차)
+/* Metis 디자인 토큰. 기준일 2026-11-20 (3차)
  * 값의 원본은 이 파일이다. docs/design/DESIGN.md 3장의 표는 이 파일에서 만든다.
  * 값을 바꾸거나 더할 때는 DESIGN.md 3장, 10.1의 대비 표, 14장을 함께 고친다.
  * 테마는 루트 요소의 data-theme(light | dark | aura)로 고른다.
@@ -24,6 +24,7 @@
   --hover: rgba(17,18,20,.05);
   --segsel: #FFFFFF;
   --accent: #0A72E8;
+  --on-accent: #FFFFFF;
   --atext: #0A64D2;
   --ring: #0A72E8;
   --soft: rgba(10,114,232,.09);
@@ -46,6 +47,7 @@
   --segbg: rgba(100,104,112,.13);
   --pop: 0 10px 30px rgba(17,18,20,.14),0 0 0 1px rgba(17,18,20,.07);
   --shadow: 0 24px 64px rgba(17,18,20,.2),0 0 0 1px rgba(17,18,20,.06);
+  --lift: 0 8px 24px -10px rgba(0,0,0,.25);
   color-scheme: light;
 
   /* 글꼴 (3.2) */
@@ -136,5 +138,6 @@
   --segbg: rgba(255,255,255,.08);
   --pop: 0 10px 30px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.09);
   --shadow: 0 24px 64px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08);
+  --lift: 0 8px 24px -10px rgba(0,0,0,.6);
   color-scheme: dark;
 }

@@ -87,9 +87,11 @@ const RULES = [
   { id: 'tw-text-size', level: 'error', msg: 'Tailwind 기본 크기 이름입니다. 눈금 이름(text-caption, text-small, text-body, text-heading, text-subtitle, text-title, text-display)을 쓰세요.', optOut: 'allowTwText',
     find: (line) => [...line.matchAll(/(?<![\w-])text-(?:xs|sm|base|lg|xl|[2-9]xl)(?![\w-])/g)].map((m) => m[0]) },
   { id: 'tw-arbitrary', level: 'error', msg: '임의 값입니다. 모서리·층·그림자는 토큰 이름을 쓰세요.',
-    find: (line) => [...line.matchAll(/(?<![\w-])(?:rounded(?:-[trblse]{1,2})?-\[(?!var\()[^\]]+\]|z-\[(?!var\()[^\]]+\]|shadow-\[(?!var\()[^\]]+\])/g)].map((m) => m[0]) },
+    find: (line) => [...line.matchAll(/(?<![\w-])(?:rounded(?:-[trblse]{1,2})?-\[(?!var\()[^\]]+\]|z-\[(?!var\()[^\]]+\]|-?z-\d+(?![\w-])|shadow-\[(?!var\()[^\]]+\])/g)].map((m) => m[0]) },
   { id: 'tw-spacing', level: 'warn', msg: '간격 눈금(' + SPACES.join(', ') + 'px) 밖의 값입니다.',
-    find: (line) => [...line.matchAll(/(?<![\w-])(?:p[xytrbl]?|m[xytrbl]?|gap(?:-[xy])?|space-[xy])-\[(-?\d*\.?\d+)px\]/g)].filter((m) => !SPACES.includes(Math.abs(Number(m[1])))).map((m) => m[0]) },
+    find: (line) => [...line.matchAll(/(?<![\w-])-?(?:p[xytrbl]?|m[xytrbl]?|gap(?:-[xy])?|space-[xy])-(?:\[(-?\d*\.?\d+)px\]|(\d+(?:\.\d+)?)(?![\w.\/-]))/g)].filter((m) => !SPACES.includes(m[1] !== undefined ? Math.abs(Number(m[1])) : Number(m[2]) * 4)).map((m) => m[0]) },
+  { id: 'tw-opacity', level: 'warn', msg: '반투명 토큰에 불투명도 수식을 덧붙였습니다. 토큰 값 그대로 쓰세요.',
+    find: (line) => [...line.matchAll(/(?<![\w-])(?:bg|text|border|outline|ring)-(?:control(?:-hover|-press)?|well|row-hover|line-control|scrim|danger-soft)\/\d+/g)].map((m) => m[0]) },
   { id: 'tw-shadow', level: 'error', msg: 'Tailwind 기본 그림자입니다. 그림자는 떠 있는 것에만, 토큰 이름(shadow-pop, shadow-modal)으로 씁니다.',
     find: (line) => [...line.matchAll(/(?<![\w-])shadow-(?:2xs|xs|sm|md|lg|xl|2xl|inner)(?![\w-])/g)].map((m) => m[0]) },
   { id: 'tw-height', level: 'warn', msg: '컨트롤 높이 눈금 밖의 값입니다. 높이 토큰(h-control 등)을 쓰세요.',
@@ -129,7 +131,7 @@ function clickOnDiv(text) {
 
 // 여러 줄에 걸칠 수 있는 색상 함수
 function colorFuncs(text) {
-  return [...text.matchAll(/(?<![\w-])(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch)\(\s*(?!var\()[^)]*\)/g)].map((m) => ({ index: m.index, text: m[0].replace(/\s+/g, ' ') }));
+  return [...text.matchAll(/(?<![\w-])(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch)\(\s*(?!var\()[^)]*\)/gi)].map((m) => ({ index: m.index, text: m[0].replace(/\s+/g, ' ') }));
 }
 
 // 아이콘만 든 버튼에 이름이 없는 경우, HTML 요소의 title 속성(운영체제 툴팁)
@@ -197,6 +199,7 @@ function scan(opts) {
   let known = null;
   if (opts.tokens) { known = new Set([...readFileSync(resolve(opts.tokens), 'utf8').matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1])); }
   const findings = [];
+  let ignoredCount = 0;
   for (const file of files) {
     const rel = relative(root, file).split(sep).join('/');
     const raw = readFileSync(file, 'utf8');
@@ -215,7 +218,7 @@ function scan(opts) {
     };
     const push = (n, rule, level, textHit, msg) => {
       const ig = ignored(n);
-      if (ig === 'ok') return;
+      if (ig === 'ok') { ignoredCount++; return; }
       if (ig === 'no-reason') { findings.push({ file: rel, line: n + 1, rule: 'ignore-without-reason', level: 'error', text: rawLines[n].trim().slice(0, 80), msg: '예외에는 이유를 적어야 합니다: design-check-ignore: 이유' }); return; }
       findings.push({ file: rel, line: n + 1, rule, level, text: textHit, msg });
     };
@@ -225,7 +228,7 @@ function scan(opts) {
         if (r.optOut && opts[r.optOut]) continue;
         for (const hit of r.find(line, ctx)) push(n, r.id, r.level, hit, r.msg);
       }
-      if (known && !isToken) for (const m of line.matchAll(/var\(\s*(--[\w-]+)/g)) {
+      if (known && !isToken) for (const m of line.matchAll(/var\(\s*(--[\w-]+)\s*(?!,)/g)) {   // 대체 값이 있는 var(--x, 값)은 넘어간다
         if (!known.has(m[1]) && !localVars.has(m[1]) && !/^--(?:tw|radix|color|text|radius|spacing|shadow|font|ease|animate|container|breakpoint|leading|tracking)-/.test(m[1])) push(n, 'unknown-token', 'error', m[1], '토큰 파일에 없는 변수입니다. 토큰을 먼저 추가하세요(DESIGN.md 6.6).');
       }
     });
@@ -234,7 +237,7 @@ function scan(opts) {
     if (/\.[jt]sx$/.test(file)) for (const hit of tagChecks(text)) push(lineOf(hit.index), hit.rule, 'warn', hit.text, hit.msg);
     if (/\.[jt]sx$/.test(file)) for (const hit of clickOnDiv(text)) push(text.slice(0, hit.index).split('\n').length - 1, 'click-on-div', 'warn', hit.text, '누를 수 있는 것은 button이나 Radix 부품으로 만드세요.');
   }
-  return { files, findings, root };
+  return { files, findings, root, ignoredCount };
 }
 
 function tally(findings) {
@@ -244,7 +247,7 @@ function tally(findings) {
 }
 
 const opts = parseArgs(process.argv.slice(2));
-const { files, findings } = scan(opts);
+const { files, findings, ignoredCount } = scan(opts);
 const errors = findings.filter((f) => f.level === 'error');
 const warns = findings.filter((f) => f.level === 'warn');
 const now = tally(findings);
@@ -259,8 +262,9 @@ if (opts.baseline && existsSync(opts.baseline)) {
 } else if (opts.baseline && !opts.update) fail('기준선 파일이 없습니다: ' + opts.baseline + ' (처음이면 --update-baseline으로 기록)');
 
 if (opts.update) {
-  if (base && total(now) > total(base) && !opts.allowIncrease) {
-    console.error('design-check: 위반이 ' + total(base) + '건에서 ' + total(now) + '건으로 늘어 기준선을 기록하지 않았습니다. 늘어난 위반을 고치세요. 꼭 필요하면 --allow-increase를 쓰고 이유를 PR에 적으세요.');
+  const up = base ? Object.entries(now).filter(([k, n]) => n > (base[k] || 0)) : [];
+  if (up.length && !opts.allowIncrease) {
+    console.error('design-check: 늘어난 위반이 있어 기준선을 기록하지 않았습니다(' + up.slice(0, 5).map(([k, n]) => k.replace('::', ' ') + ' ' + (base[k] || 0) + '→' + n).join(', ') + (up.length > 5 ? ' 외 ' + (up.length - 5) + '개' : '') + '). 늘어난 위반을 고치세요. 꼭 필요하면 --allow-increase를 쓰고 이유를 PR에 적으세요.');
     process.exit(1);
   }
   writeFileSync(opts.baseline, JSON.stringify({ note: '디자인 검사 기준선. 줄이는 방향으로만 갱신한다.', files: files.length, total: total(now), counts: Object.fromEntries(Object.entries(now).sort()) }, null, 2) + '\n');
@@ -277,13 +281,13 @@ if (base) {
 }
 
 if (opts.json) {
-  console.log(JSON.stringify({ files: files.length, errors: errors.length, warnings: warns.length, failing: failing.length, grown, findings }, null, 2));
+  console.log(JSON.stringify({ files: files.length, errors: errors.length, warnings: warns.length, ignored: ignoredCount, failing: failing.length, grown, findings }, null, 2));
 } else {
   const show = (f) => console.log(`${f.file}:${f.line}  ${f.level === 'error' ? '오류' : '알림'}  ${f.rule}  ${f.text}\n    ${f.msg}`);
   (base ? failing : errors).forEach(show);
   warns.forEach(show);
   console.log('');
-  console.log(`파일 ${files.length}개, 오류 ${errors.length}건, 알림 ${warns.length}건` + (base ? `, 기준선 ${total(base)}건 대비 늘어난 항목 ${grown.length}개` : ''));
+  console.log(`파일 ${files.length}개, 오류 ${errors.length}건, 알림 ${warns.length}건, 예외 처리 ${ignoredCount}건` + (base ? `, 기준선 ${total(base)}건 대비 늘어난 항목 ${grown.length}개` : ''));
   if (base && grown.length) grown.forEach(([k, a, b]) => console.log(`  늘어남: ${k.replace('::', '  ')}  ${a} → ${b}`));
   if (base && shrunk && !grown.length) console.log(`줄어든 항목이 ${shrunk}개 있습니다. --update-baseline으로 기준선을 낮추세요.`);
 }

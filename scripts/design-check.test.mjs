@@ -54,6 +54,18 @@ test('잡지 말아야 하는 것', () => {
   assert.equal(code, 0);
 });
 
+test('Tailwind 4의 괄호 없는 값, 대문자 색 함수, 불투명도 수식', () => {
+  const d = make({ 'src/a.tsx': 'const a = <i className="z-999 p-9 gap-2 px-3.5 m-4 bg-control/50 z-[var(--z-menu)]" style={{ color: "RGB(1, 2, 3)" }} />;' });
+  assert.deepEqual(rules(d).hits.sort(), ['color-func|RGB(1, 2, 3)', 'tw-arbitrary|z-999', 'tw-opacity|bg-control/50', 'tw-spacing|p-9']);
+});
+
+test('기준선: 한 항목이 줄고 다른 항목이 늘어 총합이 같아도 다시 기록하지 못한다', () => {
+  const d = make({ 'src/a.ts': 'const a = "#ff0000";\n', 'src/b.ts': 'const b = 1;\n' });
+  assert.equal(run(['src', '--baseline', 'b.json', '--update-baseline'], d).code, 0);
+  writeFileSync(join(d, 'src/a.ts'), 'const a = 1;\n'); writeFileSync(join(d, 'src/b.ts'), 'const b = "#00ff00";\n');
+  assert.equal(run(['src', '--baseline', 'b.json', '--update-baseline'], d).code, 1);
+});
+
 test('직접 정의한 confirm은 넘어가고 window.confirm은 잡는다', () => {
   const d = make({ 'src/a.ts': 'function confirm(x) { return x; }\nconfirm(1);\nwindow.confirm("x");\n' });
   assert.deepEqual(rules(d).hits, ['native-dialog|window.confirm(']);
@@ -65,7 +77,7 @@ test('예외에는 이유가 필요하다', () => {
 });
 
 test('토큰 파일은 정확한 경로만 허용하고, 없는 토큰 사용을 잡는다', () => {
-  const d = make({ 'src/theme-settings/Panel.tsx': 'const a = { color: "#ff0000" };', 'src/lib/tokens/count.ts': 'const b = "#00ff00";', 'src/styles/vars.css': ':root{--bg:#fff}', 'src/x.css': '.a{color:var(--bg);border-color:var(--nope);--local:1px;margin:var(--local)}' });
+  const d = make({ 'src/theme-settings/Panel.tsx': 'const a = { color: "#ff0000" };', 'src/lib/tokens/count.ts': 'const b = "#00ff00";', 'src/styles/vars.css': ':root{--bg:#fff}', 'src/x.css': '.a{color:var(--bg);border-color:var(--nope);--local:1px;margin:var(--local);padding:var(--depth, 0)}' });
   const r = rules(d, ['--tokens', 'src/styles/vars.css']);
   assert.deepEqual(r.hits.sort(), ['color-hex|#00ff00', 'color-hex|#ff0000', 'unknown-token|--nope']);
 });
