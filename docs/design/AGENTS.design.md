@@ -10,7 +10,7 @@
 
 **무엇이 기준인가**
 - 규칙은 `DESIGN.md`, 토큰 값은 `docs/design/ui/metis-tokens.css`입니다. 컴포넌트의 값은 `docs/design/ui/metis-components.css`(참조 구현)와 `ui/gallery.html`(견본)에서 봅니다.
-- `docs/design/metis-final-prototype.html`은 보기용 그림입니다. 문서와 다르면 문서를 따르고 차이를 보고합니다. 시안의 CSS에서 값을 읽어 옮기지 않습니다.
+- `docs/design/metis-final-prototype.html`은 눌러 볼 수 있는 참고용 시안이고 기준이 아닙니다. 문서와 다르면 문서를 따르고 차이를 보고합니다. 시안의 CSS에서 값을 읽어 옮기지 않습니다.
 - 저장소의 실제 이름은 `docs/design/TOKEN_MAP.md`(토큰 ↔ 저장소 변수 ↔ Tailwind 클래스)를 따릅니다.
 
 **항상 지키는 것**

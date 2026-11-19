@@ -1,6 +1,6 @@
 # Metis UI 디자인 시스템
 
-Metis 데스크탑 앱(React, TypeScript, Tailwind CSS, Radix UI, Vite, Electron)의 화면 디자인 규칙과 보기용 시안, 그리고 이를 앱에 적용하기 위한 지시서입니다. 앱의 소스 코드는 이 저장소에 없습니다.
+Metis 데스크탑 앱(React, TypeScript, Tailwind CSS, Radix UI, Vite, Electron)의 화면 디자인 규칙과 눌러 볼 수 있는 참고용 시안, 그리고 이를 앱에 적용하기 위한 지시서입니다. 앱의 소스 코드는 이 저장소에 없습니다.
 
 판: 3차 (2026-11-20). 독립 검토를 두 번 거치며 고쳤습니다. 달라진 점은 `docs/design/DESIGN.md` 14장에 있습니다.
 
@@ -13,7 +13,7 @@ Metis 데스크탑 앱(React, TypeScript, Tailwind CSS, Radix UI, Vite, Electron
 | `docs/design/ui/metis-components.css` | 컴포넌트 스타일. 기존 컴포넌트에 `mt-` 클래스를 붙여 씁니다 | 개발자, 에이전트 |
 | `docs/design/ui/gallery.html` | 컴포넌트 견본. 눌러 보고 마크업을 복사합니다 | 모두 |
 | `docs/design/ui/README.md` | React·Radix에 붙이는 예와 클래스 목록 | 개발자 |
-| `docs/design/metis-final-prototype.html` | 보기용 시안. 내려받아 브라우저로 엽니다 | 모두 |
+| `docs/design/metis-final-prototype.html` | 눌러 볼 수 있는 참고용 시안. 내려받아 브라우저로 열면 메뉴, 창, 설정, 테마 전환이 동작합니다 | 모두 |
 | `docs/design/CODEX_PROMPT.md` | 코딩 에이전트에게 주는 단계별 작업 지시서 | 에이전트에게 일을 시키는 사람 |
 | `docs/design/AGENTS.design.md` | 앱 저장소의 `AGENTS.md`에 붙여 넣을 상시 규칙 | 에이전트 |
 | `docs/design/assets/` | 시안에 쓴 로고 이미지 | |
@@ -42,7 +42,7 @@ node scripts/design-check.mjs <UI 소스 폴더> --tokens docs/design/ui/metis-t
 
 ## 알아 둘 것
 
-- **규칙은 `DESIGN.md`이고 시안은 그림입니다.** 둘이 다르면 `DESIGN.md`를 따릅니다.
+- **규칙은 `DESIGN.md`이고 시안은 눌러 볼 수 있는 참고용입니다.** 둘이 다르면 `DESIGN.md`를 따릅니다. 시안의 CSS는 옮겨 쓰지 않고, 옮겨 쓸 것은 `ui/metis-components.css`입니다.
 - 시안의 채팅, 프로젝트 경로, 모델 이름, 버전은 모두 꾸며 낸 예시입니다. 실제 앱의 데이터가 아닙니다.
 - 시안을 열면 글꼴을 받으려고 Google Fonts에 요청이 나갑니다. 그 밖의 외부 요청은 없습니다.
 - 자동 검사는 보조 도구입니다. 통과했다고 규칙을 지킨 것은 아닙니다(`DESIGN.md` 12.1).
